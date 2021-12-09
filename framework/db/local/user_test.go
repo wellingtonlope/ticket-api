@@ -90,7 +90,7 @@ func TestUserGetAllOperator(t *testing.T) {
 	repo.Insert(operator)
 
 	t.Run("get all operators", func(t *testing.T) {
-		users, _ := repo.GetAllOperators()
+		users, _ := repo.GetAllOperator()
 		if len(*users) != 1 {
 			t.Errorf("expected %q, but got %q", 1, len(*users))
 		}

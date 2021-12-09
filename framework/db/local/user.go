@@ -42,7 +42,7 @@ func (r *UserRepositoryLocal) GetByEmail(email string) (*domain.User, *myerrors.
 	return nil, myerrors.NewErrorMessage("user not found", myerrors.REGISTER_NOT_FOUND)
 }
 
-func (r *UserRepositoryLocal) GetAllOperators() (*[]domain.User, *myerrors.Error) {
+func (r *UserRepositoryLocal) GetAllOperator() (*[]domain.User, *myerrors.Error) {
 	operators := []domain.User{}
 
 	for _, user := range r.Users {
