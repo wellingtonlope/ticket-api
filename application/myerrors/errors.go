@@ -22,3 +22,7 @@ func (e *Error) Error() string {
 func NewError(err error, tp Type) *Error {
 	return &Error{err.Error(), tp}
 }
+
+func NewErrorMessage(message string, tp Type) *Error {
+	return &Error{message, tp}
+}
