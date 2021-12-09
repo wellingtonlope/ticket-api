@@ -77,6 +77,7 @@ func (t *Ticket) Get(operator *User) error {
 	}
 	now := time.Now()
 	t.UpdatedAt = &now
+	t.Status = STATUS_IN_PROGRESS
 
 	return nil
 }
@@ -89,6 +90,7 @@ func (t *Ticket) Close(solution string) error {
 	t.Solution = solution
 	now := time.Now()
 	t.UpdatedAt = &now
+	t.Status = STATUS_CLOSE
 
 	return nil
 }

@@ -74,9 +74,14 @@ func TestTicketGet(t *testing.T) {
 
 	t.Run("a valid get a ticket", func(t *testing.T) {
 		ticket, _ := TicketOpen(title, description, client)
-		err := ticket.Get(operator)
-		if err != nil {
-			t.Error("expected nil, but got an error")
+		ticket.Get(operator)
+
+		if ticket.Status != STATUS_IN_PROGRESS {
+			t.Errorf("expected %q, but got %q", STATUS_IN_PROGRESS, ticket.Status)
+		}
+
+		if ticket.UpdatedAt == nil {
+			t.Error("expected a date, but got nil")
 		}
 	})
 
@@ -106,10 +111,16 @@ func TestTicketClose(t *testing.T) {
 	t.Run("a valid close a ticket", func(t *testing.T) {
 		ticket, _ := TicketOpen(title, description, client)
 		ticket.Get(operator)
-		err := ticket.Close("solution")
-		if err != nil {
-			t.Error("expected a nil, but got an error")
+		ticket.Close("solution")
+
+		if ticket.Status != STATUS_CLOSE {
+			t.Errorf("expected %q, but got %q", STATUS_CLOSE, ticket.Status)
 		}
+
+		if ticket.UpdatedAt == nil {
+			t.Error("expected a date, but got nil")
+		}
+
 	})
 
 	t.Run("a valid close a ticket", func(t *testing.T) {
