@@ -15,6 +15,10 @@ const (
 	STATUS_CLOSE       Status = "CLOSE"
 )
 
+var (
+	ErrTicketNoOperator = errors.New("operator must be an operator")
+)
+
 type TicketUser struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
@@ -40,10 +44,6 @@ func TicketOpen(title, description string, client *User) (*Ticket, error) {
 		return nil, errors.New("client musn't be nil")
 	}
 
-	if client.Profile != PROFILE_CLIENT {
-		return nil, errors.New("client must be a client")
-	}
-
 	now := time.Now()
 	return &Ticket{
 		Base: Base{
@@ -67,7 +67,7 @@ func (t *Ticket) Get(operator *User) error {
 	}
 
 	if operator.Profile != PROFILE_OPERATOR {
-		return errors.New("operator must be an operator")
+		return ErrTicketNoOperator
 	}
 
 	t.Operator = &TicketUser{

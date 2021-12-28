@@ -4,10 +4,12 @@ type Type string
 
 const (
 	DOMAIN                  Type = "DOMAIN"
+	USECASE                 Type = "USECASE"
 	REPOSITORY              Type = "REPOSITORY"
 	REGISTER_NOT_FOUND      Type = "REGISTER_NOT_FOUND"
 	REGISTER_ALREADY_EXISTS Type = "REGISTER_ALREADY_EXISTS"
-	UNIDENTIFIED            Type = "UNIDENTIFIED"
+	UNAUTHORIZED            Type = "UNAUTHORIZED"
+	FORBIDDEN               Type = "FORBIDDEN"
 )
 
 type Error struct {

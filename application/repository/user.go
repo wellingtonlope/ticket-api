@@ -6,7 +6,7 @@ import (
 )
 
 type UserRepository interface {
-	Insert(ticket *domain.User) (*domain.User, *myerrors.Error)
+	Insert(user *domain.User) (*domain.User, *myerrors.Error)
 	GetById(id string) (*domain.User, *myerrors.Error)
 	GetByEmail(email string) (*domain.User, *myerrors.Error)
 	GetAllOperator() (*[]domain.User, *myerrors.Error)

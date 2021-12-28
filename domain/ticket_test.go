@@ -55,15 +55,6 @@ func TestTicketOpen(t *testing.T) {
 			t.Error("expected an error, but got nil")
 		}
 	})
-
-	t.Run("client is not a client", func(t *testing.T) {
-		operator, _ := UserRegister("operator", "operator@mail.com", "password")
-		operator.Profile = PROFILE_OPERATOR
-		_, err := TicketOpen(title, description, operator)
-		if err == nil {
-			t.Error("expected an error, but got nil")
-		}
-	})
 }
 
 func TestTicketGet(t *testing.T) {
