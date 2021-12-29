@@ -28,11 +28,11 @@ type TicketUser struct {
 type Ticket struct {
 	Base        `bson:",inline"`
 	Title       string      `json:"title"`
-	Description string      `json:"description"`
-	Solution    string      `json:"solution"`
+	Description string      `json:"description,omitempty" bson:",omitempty"`
+	Solution    string      `json:"solution,omitempty" bson:",omitempty"`
 	Status      Status      `json:"status"`
 	Client      *TicketUser `json:"client"`
-	Operator    *TicketUser `json:"operator"`
+	Operator    *TicketUser `json:"operator,omitempty" bson:",omitempty"`
 }
 
 func TicketOpen(title, description string, client *User) (*Ticket, error) {

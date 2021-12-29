@@ -21,6 +21,9 @@ func (uc *TokenUseCase) Validate(token string) (*domain.User, *myerrors.Error) {
 
 	user, myerr := uc.UserRepository.GetById(payload.ID)
 	if myerr != nil {
+		if myerr.Type == myerrors.REGISTER_NOT_FOUND {
+			return nil, myerrors.NewErrorMessage("invalid token", myerrors.UNAUTHORIZED)
+		}
 		return nil, myerr
 	}
 
