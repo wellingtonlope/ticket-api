@@ -4,6 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/wellingtonlope/ticket-api/application/usecase"
+	"github.com/wellingtonlope/ticket-api/docs"
+	"net/http"
 )
 
 func InitHandlers(e *echo.Echo, useCases *usecase.AllUseCases) {
@@ -15,7 +17,7 @@ func InitHandlers(e *echo.Echo, useCases *usecase.AllUseCases) {
 	}))
 
 	e.GET("/swagger/openapi.yaml", func(c echo.Context) error {
-		return c.File("docs/openapi.yaml")
+		return c.Blob(http.StatusOK, "application/yaml", docs.OpenApiYaml)
 	})
 }
 
