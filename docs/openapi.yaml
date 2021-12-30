@@ -148,7 +148,7 @@ paths:
             $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/{id}/assing/{idOperator}:
+  /ticket/{id}/assign/{idOperator}:
     post:
       tags:
         - "ticket"

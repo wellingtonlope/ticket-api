@@ -19,7 +19,7 @@ type (
 		Id       string `param:"id"`
 		Solution string `json:"solution"`
 	}
-	ticketAssingToOperatorRequest struct {
+	ticketAssignToOperatorRequest struct {
 		Id         string `param:"id"`
 		IdOperator string `param:"idOperator"`
 	}
@@ -46,7 +46,7 @@ func initTicketHandler(e *echo.Echo, ticketUseCase *ticket.TicketUseCase) {
 	e.POST("/ticket", h.Open)
 	e.POST("/ticket/:id/get", h.Get)
 	e.POST("/ticket/:id/close", h.Close)
-	e.POST("/ticket/:id/assing/:idOperator", h.AssingToOperator)
+	e.POST("/ticket/:id/assign/:idOperator", h.AssignToOperator)
 	e.DELETE("/ticket/:id", h.Delete)
 	e.GET("/ticket/:id", h.GetById)
 	e.GET("/ticket", h.GetAll)
@@ -106,16 +106,16 @@ func (h *TicketHandler) Close(c echo.Context) error {
 	return c.JSON(http.StatusOK, response)
 }
 
-func (h *TicketHandler) AssingToOperator(c echo.Context) error {
+func (h *TicketHandler) AssignToOperator(c echo.Context) error {
 	authorization := getAuthorization(c)
 
-	request := ticketAssingToOperatorRequest{}
+	request := ticketAssignToOperatorRequest{}
 	err := c.Bind(&request)
 	if err != nil {
 		return handlerError(c, myerrors.NewError(err, myerrors.UNIDENTIFIED))
 	}
 
-	response, myerr := h.ticketUseCase.AssingToOperator(request.Id, request.IdOperator, authorization)
+	response, myerr := h.ticketUseCase.AssignToOperator(request.Id, request.IdOperator, authorization)
 	if myerr != nil {
 		return handlerError(c, myerr)
 	}

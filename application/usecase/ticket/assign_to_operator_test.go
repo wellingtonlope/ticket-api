@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestAssingToOperator(t *testing.T) {
+func TestAssignToOperator(t *testing.T) {
 	uc := newTicketUC()
 	operator, _ := domain.UserRegister("operator", "operator@mail.com", "password")
 	operator2, _ := domain.UserRegister("operator2", "operator2@mail.com", "password")
@@ -19,9 +19,9 @@ func TestAssingToOperator(t *testing.T) {
 	_, _ = uc.UserUseCase.UserRepository.Insert(client)
 	clientResponse, _ := uc.UserUseCase.Login("client@mail.com", "password")
 
-	t.Run("assing a valid ticket", func(t *testing.T) {
+	t.Run("assign a valid ticket", func(t *testing.T) {
 		ticket, _ := uc.Open("title", "description", clientResponse.Token)
-		got, _ := uc.AssingToOperator(ticket.ID, operator2.ID, operatorResponse.Token)
+		got, _ := uc.AssignToOperator(ticket.ID, operator2.ID, operatorResponse.Token)
 
 		if got == nil {
 			t.Error("expected a ticket, but got a nil")
@@ -29,7 +29,7 @@ func TestAssingToOperator(t *testing.T) {
 	})
 
 	t.Run("a no-existent ticket", func(t *testing.T) {
-		_, myerr := uc.AssingToOperator("123", operator2.ID, operatorResponse.Token)
+		_, myerr := uc.AssignToOperator("123", operator2.ID, operatorResponse.Token)
 
 		if myerr == nil {
 			t.Error("expected an error, but got a nil")
@@ -42,7 +42,7 @@ func TestAssingToOperator(t *testing.T) {
 	t.Run("an invalid token", func(t *testing.T) {
 		ticket, _ := uc.Open("title", "description", clientResponse.Token)
 
-		_, myerr := uc.AssingToOperator(ticket.ID, operator2.ID, "123")
+		_, myerr := uc.AssignToOperator(ticket.ID, operator2.ID, "123")
 
 		if myerr == nil {
 			t.Error("expected an error, but got a nil")
@@ -52,10 +52,10 @@ func TestAssingToOperator(t *testing.T) {
 		}
 	})
 
-	t.Run("assing a ticket with a client", func(t *testing.T) {
+	t.Run("assign a ticket with a client", func(t *testing.T) {
 		ticket, _ := uc.Open("title", "description", clientResponse.Token)
 
-		_, myerr := uc.AssingToOperator(ticket.ID, operator2.ID, clientResponse.Token)
+		_, myerr := uc.AssignToOperator(ticket.ID, operator2.ID, clientResponse.Token)
 
 		if myerr == nil {
 			t.Error("expected an error, but got a nil")
@@ -65,10 +65,10 @@ func TestAssingToOperator(t *testing.T) {
 		}
 	})
 
-	t.Run("assing a ticket to a client", func(t *testing.T) {
+	t.Run("assign a ticket to a client", func(t *testing.T) {
 		ticket, _ := uc.Open("title", "description", clientResponse.Token)
 
-		_, myerr := uc.AssingToOperator(ticket.ID, client.ID, operatorResponse.Token)
+		_, myerr := uc.AssignToOperator(ticket.ID, client.ID, operatorResponse.Token)
 
 		if myerr == nil {
 			t.Error("expected an error, but got a nil")

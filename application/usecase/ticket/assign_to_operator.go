@@ -5,7 +5,7 @@ import (
 	"github.com/wellingtonlope/ticket-api/domain"
 )
 
-func (uc *TicketUseCase) AssingToOperator(idTicket, idOperator, token string) (*domain.Ticket, *myerrors.Error) {
+func (uc *TicketUseCase) AssignToOperator(idTicket, idOperator, token string) (*domain.Ticket, *myerrors.Error) {
 	user, myerr := uc.TokenUseCase.Validate(token)
 	if myerr != nil {
 		return nil, myerr
