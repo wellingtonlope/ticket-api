@@ -17,7 +17,7 @@ func TestUserInsert(t *testing.T) {
 		repo := newUserRepo()
 		got, _ := repo.Insert(user)
 		if got == nil {
-			t.Error("expected an user, but got a nil")
+			t.Error("expected a user, but got a nil")
 		}
 	})
 
@@ -39,7 +39,7 @@ func TestUserGetById(t *testing.T) {
 		repo.Insert(user)
 		got, _ := repo.GetById(user.ID)
 		if got == nil {
-			t.Error("expected an user, but got a nil")
+			t.Error("expected a user, but got a nil")
 		}
 	})
 
@@ -64,7 +64,7 @@ func TestUserGetByEmail(t *testing.T) {
 		repo.Insert(user)
 		got, _ := repo.GetByEmail(user.Email)
 		if got == nil {
-			t.Error("expected an user, but got a nil")
+			t.Error("expected a user, but got a nil")
 		}
 	})
 

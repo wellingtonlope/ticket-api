@@ -21,7 +21,7 @@ func TestIsValidToken(t *testing.T) {
 	t.Run("a valid token", func(t *testing.T) {
 		userPayload, _ := uc.Validate(validToken)
 		if userPayload == nil {
-			t.Error("expected an user payload, but got a nil")
+			t.Error("expected a user payload, but got a nil")
 		}
 	})
 

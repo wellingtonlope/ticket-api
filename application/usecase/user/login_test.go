@@ -14,7 +14,7 @@ func TestLogin(t *testing.T) {
 	t.Run("a valid user", func(t *testing.T) {
 		got, _ := uc.Login(email, password)
 		if got == nil {
-			t.Error("expected an UserResponse, but got a nil")
+			t.Error("expected a UserResponse, but got a nil")
 		}
 	})
 

@@ -15,7 +15,7 @@ func TestGetById(t *testing.T) {
 		got, _ := uc.GetById(user.ID)
 
 		if got == nil {
-			t.Error("expected an user, but got a nil")
+			t.Error("expected a user, but got a nil")
 		}
 	})
 

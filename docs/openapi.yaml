@@ -1,0 +1,383 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Ticket API"
+  contact:
+    email: "wellington.lopes.tw@gmail.com"
+schemes:
+  - "https"
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+- name: "user"
+  description: "User-related actions"
+- name: "ticket"
+  description: "Ticket-related actions"
+paths:
+  /user/register:
+    post:
+      tags:
+        - "user"
+      summary: "Register a user"
+      description: ""
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object that needs to register a user"
+        required: true
+        schema:
+          $ref: "#/definitions/UserRegister"
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserToken"
+        "400":
+          description: "Invalid inputs"
+  /user/login:
+    post:
+      tags:
+        - "user"
+      summary: "Login with a user"
+      description: ""
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "User object that needs to register a user"
+          required: true
+          schema:
+            $ref: "#/definitions/UserLogin"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserToken"
+        "400":
+          description: "Invalid inputs"
+  /user/operators:
+    get:
+      tags:
+        - "user"
+      summary: "Get all operators"
+      description: ""
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+      security:
+      - Token: []
+  /ticket:
+    post:
+      tags:
+        - "ticket"
+      summary: "Open a ticket"
+      description: ""
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Ticket object that needs to open a ticket"
+          required: true
+          schema:
+            $ref: "#/definitions/TicketOpen"
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+    get:
+      tags:
+        - "ticket"
+      summary: "Get all tickets"
+      description: ""
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+  /ticket/{id}/get:
+    post:
+      tags:
+        - "ticket"
+      summary: "Get a ticket"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of ticket to get"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+  /ticket/{id}/close:
+    post:
+      tags:
+        - "ticket"
+      summary: "Close a ticket"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of ticket to get"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Ticket object that needs to close a ticket"
+          required: true
+          schema:
+            $ref: "#/definitions/TicketClose"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+  /ticket/{id}/assing/{idOperator}:
+    post:
+      tags:
+        - "ticket"
+      summary: "Assign a ticket to an operator"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of ticket to get"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "idOperator"
+          description: "ID of the operator who will receive the ticket"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+  /ticket/{id}:
+    delete:
+      tags:
+        - "ticket"
+      summary: "Delete a ticket"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of ticket to delete"
+          required: true
+          type: "string"
+      responses:
+        "204":
+          description: "successful operation"
+      security:
+        - Token: [ ]
+    get:
+      tags:
+        - "ticket"
+      summary: "Get a ticket"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of ticket to get"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+  /ticket/client/{idClient}:
+    get:
+      tags:
+        - "ticket"
+      summary: "Get all tickets from a client"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "idClient"
+          description: "ID of the client who opened the ticket"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+  /ticket/operator/{idOperator}:
+    get:
+      tags:
+        - "ticket"
+      summary: "Get all tickets from an operator"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "idOperator"
+          description: "ID of the operator who picked up the ticket"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+  /ticket/open:
+    get:
+      tags:
+        - "ticket"
+      summary: "Get all open tickets"
+      description: ""
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Ticket"
+      security:
+        - Token: [ ]
+securityDefinitions:
+  Token:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "the user id"
+      createdAt:
+        type: "string"
+        format: "date-time"
+        description: "date the user was created"
+      updatedAt:
+        type: "string"
+        format: "date-time"
+        description: "date the user was updated"
+      name:
+        type: "string"
+        description: "the user's full name"
+      email:
+        type: "string"
+        description: "the user's email address"
+      profile:
+        type: "string"
+        description: "the user profile"
+  UserRegister:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "the user's full name"
+      email:
+        type: "string"
+        description: "the user's e-mail address"
+      password:
+        type: "string"
+        description: "the user password"
+  UserLogin:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "the user's e-mail address"
+      password:
+        type: "string"
+        description: "the user password"
+  UserToken:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+        description: "application authorization token"
+  TicketUser:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "the user id"
+      name:
+        type: "string"
+        description: "the user's full name"
+      email:
+        type: "string"
+        description: "the user's email address"
+  Ticket:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "the user id"
+      createdAt:
+        type: "string"
+        format: "date-time"
+        description: "date the user was created"
+      updatedAt:
+        type: "string"
+        format: "date-time"
+        description: "date the user was updated"
+      title:
+        type: "string"
+        description: "the title of the ticket"
+      description:
+        type: "string"
+        description: "the description of the ticket"
+      solution:
+        type: "string"
+        description: "the solution of the ticket"
+      status:
+        type: "string"
+        description: "the status of the ticket"
+        enum:
+          - "OPEN"
+          - "IN_PROGRESS"
+          - "CLOSE"
+      client:
+        $ref: "#/definitions/TicketUser"
+      operator:
+        $ref: "#/definitions/TicketUser"
+  TicketOpen:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+        description: "the title of the ticket"
+      description:
+        type: "string"
+        description: "the description of the ticket"
+  TicketClose:
+    type: "object"
+    properties:
+      solution:
+        type: "string"
+        description: "the solution of the ticket"

@@ -11,7 +11,7 @@ func TestRegister(t *testing.T) {
 		uc := newUserUC()
 		got, _ := uc.Register("client", "client@mail.com", "password")
 		if got == nil {
-			t.Error("expected an userReponse, but got a nil")
+			t.Error("expected a userReponse, but got a nil")
 		}
 		if got != nil && got.Token == "" {
 			t.Error("expected a token, but got nothing")
