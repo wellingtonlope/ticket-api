@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  todo-api:
+    container_name: ticket-api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - APP_ENV=production
+      - APP_SECRET=123
+      - TOKEN_DURATION_HOUR=24
+      - MONGO_URI=mongodb://ticket-db:27017
+      - MONGO_DATABASE=ticket-api
+      - PORT=1323
+    ports:
+      - "1323:1323"
+    depends_on:
+      - ticket-db
+    networks:
+      - ticket-network
+  todo-db:
+    container_name: ticket-db
+    image: mongo:latest
+    networks:
+      - ticket-network
+networks:
+  ticket-network:
+    driver: bridge
