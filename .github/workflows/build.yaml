@@ -46,9 +46,9 @@ jobs:
             TOKEN_DURATION_HOUR
             MONGO_URI
             MONGO_DATABASE
-          env:
-            APP_ENV=production
-            APP_SECRET=${{secrets.API_SECRET}}
-            TOKEN_DURATION_HOUR=${{secrets.TOKEN_DURATION_HOUR}}
-            MONGO_URI=${{secrets.MONGO_URI}}
-            MONGO_DATABASE=ticket-api
+        env:
+          APP_ENV: production
+          APP_SECRET: ${{secrets.API_SECRET}}
+          TOKEN_DURATION_HOUR: ${{secrets.TOKEN_DURATION_HOUR}}
+          MONGO_URI: ${{secrets.MONGO_URI}}
+          MONGO_DATABASE: ticket-api
