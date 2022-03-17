@@ -3,8 +3,8 @@ package ticket
 import (
 	"time"
 
-	"github.com/wellingtonlope/ticket-api/internal/app"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
@@ -76,7 +76,7 @@ func (u *Get) Handle(input GetInput) (*GetOutput, error) {
 	err = ticket.Get(input.LoggedUser, input.UpdatedAt)
 	if err != nil {
 		if err == domain.ErrTicketNoOperator {
-			return nil, app.ErrForbidden
+			return nil, security.ErrForbidden
 		}
 		return nil, err
 	}

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/wellingtonlope/ticket-api/internal/app"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 	"github.com/wellingtonlope/ticket-api/internal/infra/memory"
 )
@@ -52,6 +52,6 @@ func TestGetAllOpen(t *testing.T) {
 
 		assert.Nil(t, output)
 		assert.NotNil(t, err)
-		assert.Equal(t, app.ErrForbidden, err)
+		assert.Equal(t, security.ErrForbidden, err)
 	})
 }

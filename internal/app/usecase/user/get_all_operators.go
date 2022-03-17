@@ -3,8 +3,8 @@ package user
 import (
 	"time"
 
-	"github.com/wellingtonlope/ticket-api/internal/app"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
@@ -30,7 +30,7 @@ type GetAllOperatorsOutput struct {
 
 func (u *GetAllOperators) Handle(input GetAllOperatorsInput) (*[]GetAllOperatorsOutput, error) {
 	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
-		return nil, app.ErrForbidden
+		return nil, security.ErrForbidden
 	}
 
 	users, err := u.userRepository.GetAllOperator()

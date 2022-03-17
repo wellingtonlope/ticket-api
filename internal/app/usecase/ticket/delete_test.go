@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/wellingtonlope/ticket-api/internal/app"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 	"github.com/wellingtonlope/ticket-api/internal/infra/memory"
 )
@@ -60,7 +60,7 @@ func TestDelete(t *testing.T) {
 		output, err := uc.Handle(input)
 		assert.Nil(t, output)
 		assert.NotNil(t, err)
-		assert.Equal(t, app.ErrForbidden, err)
+		assert.Equal(t, security.ErrForbidden, err)
 	})
 
 	t.Run("Should return an error when ticket not open", func(t *testing.T) {
@@ -84,6 +84,6 @@ func TestDelete(t *testing.T) {
 		output, err := uc.Handle(input)
 		assert.Nil(t, output)
 		assert.NotNil(t, err)
-		assert.Equal(t, app.ErrForbidden, err)
+		assert.Equal(t, security.ErrForbidden, err)
 	})
 }

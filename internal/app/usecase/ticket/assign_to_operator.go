@@ -3,8 +3,8 @@ package ticket
 import (
 	"time"
 
-	"github.com/wellingtonlope/ticket-api/internal/app"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
@@ -71,7 +71,7 @@ func assignToOperatorOutputFromTicket(ticket *domain.Ticket) *AssignToOperatorOu
 
 func (u *AssignToOperator) Handle(input AssignToOperatorInput) (*AssignToOperatorOutput, error) {
 	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
-		return nil, app.ErrForbidden
+		return nil, security.ErrForbidden
 	}
 
 	ticket, err := u.ticketRepository.GetByID(input.TicketID)

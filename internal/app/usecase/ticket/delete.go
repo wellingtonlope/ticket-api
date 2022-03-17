@@ -1,8 +1,8 @@
 package ticket
 
 import (
-	"github.com/wellingtonlope/ticket-api/internal/app"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
@@ -28,11 +28,11 @@ func (u *Delete) Handle(input DeleteInput) (*DeleteOutput, error) {
 	}
 
 	if ticket.Client.ID != input.LoggedUser.ID {
-		return nil, app.ErrForbidden
+		return nil, security.ErrForbidden
 	}
 
 	if ticket.Status != domain.STATUS_OPEN {
-		return nil, app.ErrForbidden
+		return nil, security.ErrForbidden
 	}
 
 	err = u.ticketRepository.DeleteByID(ticket.ID)

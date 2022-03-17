@@ -3,8 +3,8 @@ package ticket
 import (
 	"time"
 
-	"github.com/wellingtonlope/ticket-api/internal/app"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
@@ -70,7 +70,7 @@ func closeOutputFromTicket(ticket *domain.Ticket) *CloseOutput {
 
 func (u *Close) Handle(input CloseInput) (*CloseOutput, error) {
 	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
-		return nil, app.ErrForbidden
+		return nil, security.ErrForbidden
 	}
 
 	ticket, err := u.ticketRepository.GetByID(input.TicketID)

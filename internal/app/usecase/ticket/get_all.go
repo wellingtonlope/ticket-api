@@ -3,8 +3,8 @@ package ticket
 import (
 	"time"
 
-	"github.com/wellingtonlope/ticket-api/internal/app"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
@@ -67,7 +67,7 @@ func getAllOutputFromTicket(ticket *domain.Ticket) *GetAllOutput {
 
 func (u *GetAll) Handle(input GetAllInput) (*[]GetAllOutput, error) {
 	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
-		return nil, app.ErrForbidden
+		return nil, security.ErrForbidden
 	}
 
 	tickets, err := u.ticketRepository.GetAll()
