@@ -28,6 +28,7 @@ func TestRegister(t *testing.T) {
 		assert.Equal(t, input.Name, output.Name)
 		assert.Equal(t, input.Email, output.Email)
 		assert.Equal(t, input.CreatedAt, *output.CreatedAt)
+		assert.Nil(t, output.UpdatedAt)
 
 		user, err := repo.GetByID(output.ID)
 
@@ -37,6 +38,7 @@ func TestRegister(t *testing.T) {
 		assert.Equal(t, output.Name, user.Name)
 		assert.Equal(t, output.Email, user.Email.String())
 		assert.Equal(t, output.CreatedAt, user.CreatedAt)
+		assert.Nil(t, user.UpdatedAt)
 	})
 
 	t.Run("shouldn't register user when user already register", func(t *testing.T) {

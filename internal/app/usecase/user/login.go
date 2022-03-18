@@ -2,7 +2,6 @@ package user
 
 import (
 	"errors"
-	"time"
 
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
 )
@@ -24,15 +23,7 @@ type LoginInput struct {
 	Password string
 }
 
-type LoginOutput struct {
-	ID        string
-	Name      string
-	Email     string
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
-}
-
-func (u *Login) Handle(input LoginInput) (*LoginOutput, error) {
+func (u *Login) Handle(input LoginInput) (*UserOutput, error) {
 	user, err := u.userRepository.GetByEmail(input.Email)
 	if err != nil {
 		if err == repository.ErrUserNotFound {
@@ -45,11 +36,5 @@ func (u *Login) Handle(input LoginInput) (*LoginOutput, error) {
 		return nil, ErrUserEmailPasswordWrong
 	}
 
-	return &LoginOutput{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email.String(),
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}, nil
+	return userOutputFromUser(user), nil
 }

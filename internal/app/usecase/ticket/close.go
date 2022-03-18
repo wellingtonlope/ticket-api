@@ -23,52 +23,7 @@ type CloseInput struct {
 	LoggedUser domain.User
 }
 
-type CloseUserOutput struct {
-	ID    string
-	Name  string
-	Email string
-}
-
-type CloseOutput struct {
-	ID          string
-	Title       string
-	Description string
-	Solution    string
-	Status      string
-	Client      *CloseUserOutput
-	Operator    *CloseUserOutput
-	CreatedAt   *time.Time
-	UpdatedAt   *time.Time
-}
-
-func closeOutputFromTicket(ticket *domain.Ticket) *CloseOutput {
-	var operator *CloseUserOutput
-	if ticket.Operator != nil {
-		operator = &CloseUserOutput{
-			ID:    ticket.Operator.ID,
-			Name:  ticket.Operator.Name,
-			Email: ticket.Operator.Email.String(),
-		}
-	}
-
-	return &CloseOutput{
-		ID:          ticket.ID,
-		Title:       ticket.Title,
-		Description: ticket.Description,
-		Solution:    ticket.Solution,
-		Status:      string(ticket.Status),
-		CreatedAt:   ticket.CreatedAt,
-		UpdatedAt:   ticket.UpdatedAt,
-		Client: &CloseUserOutput{
-			ID:    ticket.Client.ID,
-			Name:  ticket.Client.Name,
-			Email: ticket.Client.Email.String(),
-		},
-		Operator: operator,
-	}
-}
-
-func (u *Close) Handle(input CloseInput) (*CloseOutput, error) {
+func (u *Close) Handle(input CloseInput) (*TicketOutput, error) {
 	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
 		return nil, security.ErrForbidden
 	}
@@ -88,5 +43,5 @@ func (u *Close) Handle(input CloseInput) (*CloseOutput, error) {
 		return nil, err
 	}
 
-	return closeOutputFromTicket(ticket), nil
+	return ticketOutputFromTicket(ticket), nil
 }

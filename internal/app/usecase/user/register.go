@@ -27,14 +27,7 @@ type RegisterInput struct {
 	CreatedAt time.Time
 }
 
-type RegisterOutput struct {
-	ID        string
-	Name      string
-	Email     string
-	CreatedAt *time.Time
-}
-
-func (u *Register) Handle(input RegisterInput) (*RegisterOutput, error) {
+func (u *Register) Handle(input RegisterInput) (*UserOutput, error) {
 	user, err := u.userRepository.GetByEmail(input.Email)
 	if err != nil && err != repository.ErrUserNotFound {
 		return nil, err
@@ -54,10 +47,5 @@ func (u *Register) Handle(input RegisterInput) (*RegisterOutput, error) {
 		return nil, err
 	}
 
-	return &RegisterOutput{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email.String(),
-		CreatedAt: user.CreatedAt,
-	}, nil
+	return userOutputFromUser(user), nil
 }

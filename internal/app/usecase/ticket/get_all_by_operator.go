@@ -1,8 +1,6 @@
 package ticket
 
 import (
-	"time"
-
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
@@ -21,52 +19,7 @@ type GetAllByOperatorInput struct {
 	LoggedUser domain.User
 }
 
-type GetAllByOperatorUserOutput struct {
-	ID    string
-	Name  string
-	Email string
-}
-
-type GetAllByOperatorOutput struct {
-	ID          string
-	Title       string
-	Description string
-	Solution    string
-	Status      string
-	Client      *GetAllByOperatorUserOutput
-	Operator    *GetAllByOperatorUserOutput
-	CreatedAt   *time.Time
-	UpdateAt    *time.Time
-}
-
-func getAllByOperatorOutputFromTicket(ticket *domain.Ticket) *GetAllByOperatorOutput {
-	var operator *GetAllByOperatorUserOutput
-	if ticket.Operator != nil {
-		operator = &GetAllByOperatorUserOutput{
-			ID:    ticket.Operator.ID,
-			Name:  ticket.Operator.Name,
-			Email: ticket.Operator.Email.String(),
-		}
-	}
-
-	return &GetAllByOperatorOutput{
-		ID:          ticket.ID,
-		Title:       ticket.Title,
-		Description: ticket.Description,
-		Solution:    ticket.Solution,
-		Status:      string(ticket.Status),
-		CreatedAt:   ticket.CreatedAt,
-		UpdateAt:    ticket.UpdatedAt,
-		Client: &GetAllByOperatorUserOutput{
-			ID:    ticket.Client.ID,
-			Name:  ticket.Client.Name,
-			Email: ticket.Client.Email.String(),
-		},
-		Operator: operator,
-	}
-}
-
-func (u *GetAllByOperator) Handle(input GetAllByOperatorInput) (*[]GetAllByOperatorOutput, error) {
+func (u *GetAllByOperator) Handle(input GetAllByOperatorInput) (*[]TicketOutput, error) {
 	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
 		return nil, security.ErrForbidden
 	}
@@ -75,11 +28,5 @@ func (u *GetAllByOperator) Handle(input GetAllByOperatorInput) (*[]GetAllByOpera
 	if err != nil {
 		return nil, err
 	}
-
-	output := make([]GetAllByOperatorOutput, 0, len(*tickets))
-	for _, ticket := range *tickets {
-		output = append(output, *getAllByOperatorOutputFromTicket(&ticket))
-	}
-
-	return &output, nil
+	return ticketsOutputsFromTickets(tickets), nil
 }

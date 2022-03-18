@@ -38,7 +38,7 @@ func TestGetByID(t *testing.T) {
 		assert.Equal(t, ticket.Title, output.Title)
 		assert.Equal(t, ticket.Description, output.Description)
 		assert.Equal(t, ticket.CreatedAt, output.CreatedAt)
-		assert.Equal(t, ticket.UpdatedAt, output.UpdateAt)
+		assert.Equal(t, ticket.UpdatedAt, output.UpdatedAt)
 		assert.Equal(t, ticket.Client.ID, output.Client.ID)
 		assert.Equal(t, ticket.Client.Name, output.Client.Name)
 		assert.Equal(t, ticket.Client.Email.String(), output.Client.Email)

@@ -22,23 +22,7 @@ type OpenInput struct {
 	LoggedUser  domain.User
 }
 
-type OpenUserOutput struct {
-	ID    string
-	Name  string
-	Email string
-}
-
-type OpenOutput struct {
-	ID          string
-	Title       string
-	Description string
-	Solution    string
-	Status      string
-	Client      *OpenUserOutput
-	CreatedAt   *time.Time
-}
-
-func (u *Open) Handle(input OpenInput) (*OpenOutput, error) {
+func (u *Open) Handle(input OpenInput) (*TicketOutput, error) {
 	loggedUser := input.LoggedUser
 	ticket, err := domain.OpenTicket(input.Title, input.Description, input.CreatedAt, loggedUser)
 	if err != nil {
@@ -50,17 +34,5 @@ func (u *Open) Handle(input OpenInput) (*OpenOutput, error) {
 		return nil, err
 	}
 
-	return &OpenOutput{
-		ID:          ticket.ID,
-		Title:       ticket.Title,
-		Description: ticket.Description,
-		Solution:    ticket.Solution,
-		Status:      string(ticket.Status),
-		Client: &OpenUserOutput{
-			ID:    loggedUser.ID,
-			Name:  loggedUser.Name,
-			Email: loggedUser.Email.String(),
-		},
-		CreatedAt: ticket.CreatedAt,
-	}, nil
+	return ticketOutputFromTicket(ticket), nil
 }
