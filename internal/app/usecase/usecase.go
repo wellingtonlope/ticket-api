@@ -22,20 +22,25 @@ type AllUseCases struct {
 	TicketOpen             *ticket.Open
 }
 
-func GetUseCases(repositories *repository.AllRepositories) (*AllUseCases, error) {
+func GetUseCases(repositories repository.Repositories) (*AllUseCases, error) {
+	repos, err := repositories.GetRepositories()
+	if err != nil {
+		return nil, err
+	}
+
 	return &AllUseCases{
-		UserGetAllOperators:    user.NewGetAllOperators(repositories.UserRepository),
-		UserLogin:              user.NewLogin(repositories.UserRepository),
-		UserRegister:           user.NewRegister(repositories.UserRepository),
-		TicketAssignToOperator: ticket.NewAssignToOperator(repositories.TicketRepository, repositories.UserRepository),
-		TicketClose:            ticket.NewClose(repositories.TicketRepository),
-		TicketDelete:           ticket.NewDelete(repositories.TicketRepository),
-		TicketGet:              ticket.NewGet(repositories.TicketRepository),
-		TicketGetAll:           ticket.NewGetAll(repositories.TicketRepository),
-		TicketGetAllByClient:   ticket.NewGetAllByClient(repositories.TicketRepository),
-		TicketGetAllByOperator: ticket.NewGetAllByOperator(repositories.TicketRepository),
-		TicketGetAllOPen:       ticket.NewGetAllOpen(repositories.TicketRepository),
-		TicketGetByID:          ticket.NewGetByID(repositories.TicketRepository),
-		TicketOpen:             ticket.NewOpen(repositories.TicketRepository),
+		UserGetAllOperators:    user.NewGetAllOperators(repos.UserRepository),
+		UserLogin:              user.NewLogin(repos.UserRepository),
+		UserRegister:           user.NewRegister(repos.UserRepository),
+		TicketAssignToOperator: ticket.NewAssignToOperator(repos.TicketRepository, repos.UserRepository),
+		TicketClose:            ticket.NewClose(repos.TicketRepository),
+		TicketDelete:           ticket.NewDelete(repos.TicketRepository),
+		TicketGet:              ticket.NewGet(repos.TicketRepository),
+		TicketGetAll:           ticket.NewGetAll(repos.TicketRepository),
+		TicketGetAllByClient:   ticket.NewGetAllByClient(repos.TicketRepository),
+		TicketGetAllByOperator: ticket.NewGetAllByOperator(repos.TicketRepository),
+		TicketGetAllOPen:       ticket.NewGetAllOpen(repos.TicketRepository),
+		TicketGetByID:          ticket.NewGetByID(repos.TicketRepository),
+		TicketOpen:             ticket.NewOpen(repos.TicketRepository),
 	}, nil
 }

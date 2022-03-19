@@ -3,18 +3,22 @@ package http
 import (
 	"encoding/json"
 	"errors"
-	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase"
-	"github.com/wellingtonlope/ticket-api/internal/domain"
-	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
 	"net/http"
+)
+
+const (
+	AuthorizationHeader = "Authorization"
+	ContentTypeHeader   = "Content-Type"
+	ContentTypeJSON     = "application/json"
 )
 
 type Handler func(r Request) Response
 type Middleware func(h Handler) Handler
 type (
 	Request struct {
-		LoggedUser *domain.User
+		LoggedUser *security.User
 		Header     map[string]string
 		Params     map[string]string
 		Query      map[string]string
@@ -47,8 +51,7 @@ type Server interface {
 type Http struct {
 	Server        Server
 	UseCases      *usecase.AllUseCases
-	Repositories  *repository.AllRepositories
-	Authenticator *jwt.Authenticator
+	Authenticator security.Authenticator
 }
 
 func wrapError(err error) string {

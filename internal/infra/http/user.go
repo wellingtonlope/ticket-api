@@ -5,7 +5,6 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase/user"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
-	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
 	"net/http"
 	"time"
 )
@@ -58,7 +57,7 @@ type UserController struct {
 	UCRegister        *user.Register
 	UCLogin           *user.Login
 	UCGetAllOperators *user.GetAllOperators
-	Authenticator     *jwt.Authenticator
+	Authenticator     security.Authenticator
 }
 
 func (c *UserController) Register(request Request) Response {
@@ -93,7 +92,11 @@ func (c *UserController) Register(request Request) Response {
 		}
 	}
 
-	token, err := c.Authenticator.Generate(output.ID)
+	token, err := c.Authenticator.Generate(security.User{
+		ID:      output.ID,
+		Name:    output.Name,
+		Profile: output.Profile,
+	})
 	if err != nil {
 		return Response{
 			HttpCode: http.StatusInternalServerError,
@@ -134,7 +137,11 @@ func (c *UserController) Login(request Request) Response {
 		}
 	}
 
-	token, err := c.Authenticator.Generate(output.ID)
+	token, err := c.Authenticator.Generate(security.User{
+		ID:      output.ID,
+		Name:    output.Name,
+		Profile: output.Profile,
+	})
 	if err != nil {
 		return Response{
 			HttpCode: http.StatusInternalServerError,

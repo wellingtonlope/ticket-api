@@ -1,35 +1,46 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	echoV4 "github.com/labstack/echo/v4"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase"
 	"github.com/wellingtonlope/ticket-api/internal/infra/http"
 	"github.com/wellingtonlope/ticket-api/internal/infra/http/echo"
 	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
 	"github.com/wellingtonlope/ticket-api/internal/infra/memory"
+	"log"
+	"os"
+	"strconv"
 	"time"
 )
 
 func main() {
-	repositories, err := (&memory.Repositories{}).GetRepositories()
-	if err != nil {
-		panic("Error during repositories connection")
+	if err := godotenv.Load(); err != nil && os.Getenv("APP_ENV") != "production" {
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	useCases, err := usecase.GetUseCases(repositories)
+	useCases, err := usecase.GetUseCases(&memory.Repositories{})
 	if err != nil {
-		panic("Error during server initialization")
+		log.Fatalf("Error getting use cases: %v", err)
 	}
 
-	authenticator := jwt.NewAuthenticator(repositories.UserRepository, "secret", time.Hour*time.Duration(24))
+	durationHour, err := strconv.Atoi(os.Getenv("TOKEN_DURATION_HOUR"))
+	if err != nil {
+		durationHour = 24
+	}
+	authenticator := jwt.NewAuthenticator(os.Getenv("APP_SECRET"), time.Hour*time.Duration(durationHour))
+
+	port, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		port = 8080
+	}
 	server := &echo.Server{
 		Echo: echoV4.New(),
 	}
 
-	(&http.Http{
+	log.Fatalf("Error during server initialization: %v", (&http.Http{
 		UseCases:      useCases,
 		Server:        server,
-		Repositories:  repositories,
 		Authenticator: authenticator,
-	}).Start(1323)
+	}).Start(port))
 }

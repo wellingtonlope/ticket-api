@@ -38,13 +38,13 @@ func (s *Server) Register(r http.Route) {
 		}
 
 		headers := make(map[string]string)
-		headers["Authorization"] = c.Request().Header.Get("Authorization")
+		headers[http.AuthorizationHeader] = c.Request().Header.Get(http.AuthorizationHeader)
 		response := stackMiddleware(http.Request{
 			Header: headers,
 			Body:   string(bytes),
 		})
 
-		c.Response().Header().Set("Content-Type", "application/json")
+		c.Response().Header().Set(http.ContentTypeHeader, http.ContentTypeJSON)
 		return c.String(response.HttpCode, response.Body)
 	})
 }

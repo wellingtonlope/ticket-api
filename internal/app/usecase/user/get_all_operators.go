@@ -15,11 +15,11 @@ func NewGetAllOperators(userRepository repository.UserRepository) *GetAllOperato
 }
 
 type GetAllOperatorsInput struct {
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 func (u *GetAllOperators) Handle(input GetAllOperatorsInput) (*[]UserOutput, error) {
-	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
+	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
 		return nil, security.ErrForbidden
 	}
 

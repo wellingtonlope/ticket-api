@@ -22,10 +22,10 @@ func TestGetAllOperators(t *testing.T) {
 		uc := NewGetAllOperators(repo)
 
 		operator1, _ = repo.Insert(*operator1)
-		repo.Insert(*operator2)
-		repo.Insert(*client)
+		_, _ = repo.Insert(*operator2)
+		_, _ = repo.Insert(*client)
 
-		output, err := uc.Handle(GetAllOperatorsInput{LoggedUser: *operator1})
+		output, err := uc.Handle(GetAllOperatorsInput{LoggedUser: security.NewUser(*operator1)})
 
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
@@ -36,11 +36,11 @@ func TestGetAllOperators(t *testing.T) {
 		repo := &memory.UserRepository{}
 		uc := NewGetAllOperators(repo)
 
-		repo.Insert(*operator1)
-		repo.Insert(*operator2)
+		_, _ = repo.Insert(*operator1)
+		_, _ = repo.Insert(*operator2)
 		client, _ := repo.Insert(*client)
 
-		output, err := uc.Handle(GetAllOperatorsInput{LoggedUser: *client})
+		output, err := uc.Handle(GetAllOperatorsInput{LoggedUser: security.NewUser(*client)})
 
 		assert.Nil(t, output)
 		assert.NotNil(t, err)

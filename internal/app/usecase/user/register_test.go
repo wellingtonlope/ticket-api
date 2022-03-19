@@ -27,6 +27,7 @@ func TestRegister(t *testing.T) {
 		assert.NotEmpty(t, output.ID)
 		assert.Equal(t, input.Name, output.Name)
 		assert.Equal(t, input.Email, output.Email)
+		assert.Equal(t, string(domain.PROFILE_CLIENT), output.Profile)
 		assert.Equal(t, input.CreatedAt, *output.CreatedAt)
 		assert.Nil(t, output.UpdatedAt)
 
@@ -37,6 +38,7 @@ func TestRegister(t *testing.T) {
 		assert.Equal(t, output.ID, user.ID)
 		assert.Equal(t, output.Name, user.Name)
 		assert.Equal(t, output.Email, user.Email.String())
+		assert.Equal(t, output.Profile, string(user.Profile))
 		assert.Equal(t, output.CreatedAt, user.CreatedAt)
 		assert.Nil(t, user.UpdatedAt)
 	})

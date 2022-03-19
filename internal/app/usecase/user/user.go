@@ -10,6 +10,7 @@ type UserOutput struct {
 	ID        string
 	Name      string
 	Email     string
+	Profile   string
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 }
@@ -19,6 +20,7 @@ func userOutputFromUser(user *domain.User) *UserOutput {
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email.String(),
+		Profile:   string(user.Profile),
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
