@@ -1,33 +1,34 @@
 package http
 
 import (
-	"github.com/labstack/echo/v4"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
 	"net/http"
 )
 
 type AuthMiddleware struct {
-	authenticator *jwt.Authenticator
+	Authenticator *jwt.Authenticator
 }
 
-func NewAuthMiddleware(authenticator *jwt.Authenticator) *AuthMiddleware {
-	return &AuthMiddleware{
-		authenticator: authenticator,
-	}
-}
+func (m *AuthMiddleware) Handle(next Handler) Handler {
+	return func(r Request) Response {
+		jwtToken := r.Header["Authorization"]
 
-func (m *AuthMiddleware) Handle(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		auths := c.Request().Header["Authorization"]
-		if len(auths) > 0 {
-			user, err := m.authenticator.Validate(auths[0])
+		if len(jwtToken) > 0 {
+			user, err := m.Authenticator.Validate(jwtToken)
 			if err != nil {
-				return c.JSON(http.StatusUnauthorized, wrapError(err))
+				return Response{
+					HttpCode: http.StatusUnauthorized,
+					Body:     wrapError(err),
+				}
 			}
-			c.Set(ContextUser, user)
-			return next(c)
+			r.LoggedUser = user
+			return next(r)
 		}
-		return c.JSON(http.StatusUnauthorized, wrapError(security.ErrUnauthorized))
+
+		return Response{
+			HttpCode: http.StatusUnauthorized,
+			Body:     wrapError(security.ErrUnauthorized),
+		}
 	}
 }

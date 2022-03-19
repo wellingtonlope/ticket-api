@@ -1,28 +1,26 @@
 package http
 
 import (
+	"encoding/json"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
+	"github.com/wellingtonlope/ticket-api/internal/app/usecase/user"
+	"github.com/wellingtonlope/ticket-api/internal/domain"
 	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
 	"net/http"
 	"time"
-
-	"github.com/labstack/echo/v4"
-	"github.com/wellingtonlope/ticket-api/internal/app/security"
-	"github.com/wellingtonlope/ticket-api/internal/app/usecase"
-	"github.com/wellingtonlope/ticket-api/internal/app/usecase/user"
-	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
 type (
-	userRegisterRequest struct {
+	UserRegisterRequest struct {
 		Name     string `json:"name"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
-	userLoginRequest struct {
+	UserLoginRequest struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
-	userTokenResponse struct {
+	UserTokenResponse struct {
 		Token string `json:"token"`
 	}
 	UserResponse struct {
@@ -56,109 +54,118 @@ func usersResponseFromUsersOutput(outputs *[]user.UserOutput) *[]UserResponse {
 	return &response
 }
 
-type UserHandler struct {
-	userRegister        *user.Register
-	userLogin           *user.Login
-	userGetAllOperators *user.GetAllOperators
-	authenticator       *jwt.Authenticator
+type UserController struct {
+	UCRegister        *user.Register
+	UCLogin           *user.Login
+	UCGetAllOperators *user.GetAllOperators
+	Authenticator     *jwt.Authenticator
 }
 
-func initUserHandler(e *echo.Echo, useCases *usecase.AllUseCases, authenticator *jwt.Authenticator) {
-	handler := &UserHandler{
-		userRegister:        useCases.UserRegister,
-		userLogin:           useCases.UserLogin,
-		userGetAllOperators: useCases.UserGetAllOperators,
-		authenticator:       authenticator,
-	}
-
-	authMiddleware := NewAuthMiddleware(authenticator)
-
-	e.POST("/users/register", handler.register)
-	e.POST("/users/login", handler.login)
-	e.GET("/users/operators", handler.getAllOperators, authMiddleware.Handle)
-}
-
-func (h *UserHandler) register(c echo.Context) error {
-	request := userRegisterRequest{}
-	err := c.Bind(&request)
+func (c *UserController) Register(request Request) Response {
+	var registerRequest UserRegisterRequest
+	err := json.Unmarshal([]byte(request.Body), &registerRequest)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, wrapError(err))
+		return Response{
+			HttpCode: http.StatusBadRequest,
+			Body:     wrapError(ErrInvalidJsonBody),
+		}
 	}
 
 	input := user.RegisterInput{
-		Name:      request.Name,
-		Email:     request.Email,
-		Password:  request.Password,
+		Name:      registerRequest.Name,
+		Email:     registerRequest.Email,
+		Password:  registerRequest.Password,
 		CreatedAt: time.Now(),
 	}
-
-	output, err := h.userRegister.Handle(input)
-
+	output, err := c.UCRegister.Handle(input)
 	if err != nil {
+		httpStatus := http.StatusInternalServerError
 		switch err {
 		case user.ErrUserAlreadyExists:
 		case domain.ErrNameIsInvalid:
 		case domain.ErrEmailIsInvalid:
 		case domain.ErrPasswordIsInvalid:
-			return c.JSON(http.StatusBadRequest, wrapError(err))
-		default:
-			return c.JSON(http.StatusInternalServerError, wrapError(err))
+			httpStatus = http.StatusBadRequest
+		}
+		return Response{
+			HttpCode: httpStatus,
+			Body:     wrapError(err),
 		}
 	}
 
-	token, err := h.authenticator.Generate(output.ID)
+	token, err := c.Authenticator.Generate(output.ID)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, wrapError(err))
+		return Response{
+			HttpCode: http.StatusInternalServerError,
+			Body:     wrapError(err),
+		}
 	}
 
-	return c.JSON(http.StatusCreated, userTokenResponse{Token: token})
+	return Response{
+		HttpCode: http.StatusCreated,
+		Body:     wrapBody(UserTokenResponse{Token: token}),
+	}
 }
 
-func (h *UserHandler) login(c echo.Context) error {
-	request := userLoginRequest{}
-	err := c.Bind(&request)
+func (c *UserController) Login(request Request) Response {
+	var loginRequest UserLoginRequest
+	err := json.Unmarshal([]byte(request.Body), &loginRequest)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, wrapError(err))
+		return Response{
+			HttpCode: http.StatusBadRequest,
+			Body:     wrapError(ErrInvalidJsonBody),
+		}
 	}
 
 	input := user.LoginInput{
-		Email:    request.Email,
-		Password: request.Password,
+		Email:    loginRequest.Email,
+		Password: loginRequest.Password,
 	}
-
-	output, err := h.userLogin.Handle(input)
+	output, err := c.UCLogin.Handle(input)
 	if err != nil {
+		httpStatus := http.StatusInternalServerError
 		switch err {
 		case user.ErrUserEmailPasswordWrong:
-			return c.JSON(http.StatusBadRequest, wrapError(err))
-		default:
-			return c.JSON(http.StatusInternalServerError, wrapError(err))
+			httpStatus = http.StatusBadRequest
+		}
+		return Response{
+			HttpCode: httpStatus,
+			Body:     wrapError(err),
 		}
 	}
 
-	token, err := h.authenticator.Generate(output.ID)
+	token, err := c.Authenticator.Generate(output.ID)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, wrapError(err))
+		return Response{
+			HttpCode: http.StatusInternalServerError,
+			Body:     wrapError(err),
+		}
 	}
 
-	return c.JSON(http.StatusOK, userTokenResponse{Token: token})
+	return Response{
+		HttpCode: http.StatusOK,
+		Body:     wrapBody(UserTokenResponse{Token: token}),
+	}
 }
 
-func (h *UserHandler) getAllOperators(c echo.Context) error {
-	loggedUser := c.Get(ContextUser).(*domain.User)
-	input := user.GetAllOperatorsInput{
-		LoggedUser: *loggedUser,
-	}
-
-	output, err := h.userGetAllOperators.Handle(input)
+func (c *UserController) GetAllOperators(request Request) Response {
+	output, err := c.UCGetAllOperators.Handle(user.GetAllOperatorsInput{
+		LoggedUser: *request.LoggedUser,
+	})
 	if err != nil {
+		httpStatus := http.StatusInternalServerError
 		switch err {
 		case security.ErrForbidden:
-			return c.JSON(http.StatusForbidden, wrapError(err))
-		default:
-			return c.JSON(http.StatusInternalServerError, wrapError(err))
+			httpStatus = http.StatusForbidden
+		}
+		return Response{
+			HttpCode: httpStatus,
+			Body:     wrapError(err),
 		}
 	}
 
-	return c.JSON(http.StatusOK, usersResponseFromUsersOutput(output))
+	return Response{
+		HttpCode: http.StatusCreated,
+		Body:     wrapBody(usersResponseFromUsersOutput(output)),
+	}
 }

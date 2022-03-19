@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
+	echoV4 "github.com/labstack/echo/v4"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase"
 	"github.com/wellingtonlope/ticket-api/internal/infra/http"
+	"github.com/wellingtonlope/ticket-api/internal/infra/http/echo"
 	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
 	"github.com/wellingtonlope/ticket-api/internal/infra/memory"
 	"time"
@@ -21,13 +22,14 @@ func main() {
 	}
 
 	authenticator := jwt.NewAuthenticator(repositories.UserRepository, "secret", time.Hour*time.Duration(24))
-	e := echo.New()
-	http.Http{
+	server := &echo.Server{
+		Echo: echoV4.New(),
+	}
+
+	(&http.Http{
 		UseCases:      useCases,
-		Echo:          e,
+		Server:        server,
 		Repositories:  repositories,
 		Authenticator: authenticator,
-	}.Init()
-
-	e.Logger.Fatal(e.Start(":1323"))
+	}).Start(1323)
 }
