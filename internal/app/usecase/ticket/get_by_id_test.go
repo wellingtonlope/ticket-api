@@ -1,6 +1,7 @@
 package ticket
 
 import (
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"testing"
 	"time"
 
@@ -28,7 +29,7 @@ func TestGetByID(t *testing.T) {
 
 		input := GetByIDInput{
 			TicketID:   ticket.ID,
-			LoggedUser: *client,
+			LoggedUser: security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)
@@ -62,7 +63,7 @@ func TestGetByID(t *testing.T) {
 
 		input := GetByIDInput{
 			TicketID:   ticket.ID,
-			LoggedUser: *client,
+			LoggedUser: security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)
@@ -86,7 +87,7 @@ func TestGetByID(t *testing.T) {
 
 		input := GetByIDInput{
 			TicketID:   ticket.ID,
-			LoggedUser: *operator,
+			LoggedUser: security.NewUser(*operator),
 		}
 
 		output, err := uc.Handle(input)
@@ -105,7 +106,7 @@ func TestGetByID(t *testing.T) {
 
 		input := GetByIDInput{
 			TicketID:   "invalid_id",
-			LoggedUser: *client,
+			LoggedUser: security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)

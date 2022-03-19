@@ -12,6 +12,7 @@ const (
 	AuthorizationHeader = "Authorization"
 	ContentTypeHeader   = "Content-Type"
 	ContentTypeJSON     = "application/json"
+	DataFormat          = "2006-01-02T15:04:05"
 )
 
 type Handler func(r Request) Response
@@ -77,30 +78,47 @@ func wrapBody(body interface{}) string {
 }
 
 func (h *Http) Start(port int) error {
-	controller := UserController{
+	authMiddleware := AuthMiddleware{
+		Authenticator: h.Authenticator,
+	}
+	userController := UserController{
 		UCRegister:        h.UseCases.UserRegister,
 		UCLogin:           h.UseCases.UserLogin,
 		UCGetAllOperators: h.UseCases.UserGetAllOperators,
 		Authenticator:     h.Authenticator,
 	}
-	authMiddleware := AuthMiddleware{
+	ticketController := TicketController{
+		UCOpen:        h.UseCases.TicketOpen,
+		UCGet:         h.UseCases.TicketGet,
 		Authenticator: h.Authenticator,
 	}
 
 	h.Server.Register(Route{
 		Method:  http.MethodPost,
 		Path:    "/users/register",
-		Handler: controller.Register,
+		Handler: userController.Register,
 	})
 	h.Server.Register(Route{
 		Method:  http.MethodPost,
 		Path:    "/users/login",
-		Handler: controller.Login,
+		Handler: userController.Login,
 	})
 	h.Server.Register(Route{
 		Method:      http.MethodGet,
 		Path:        "/users/operators",
-		Handler:     controller.GetAllOperators,
+		Handler:     userController.GetAllOperators,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodPost,
+		Path:        "/tickets",
+		Handler:     ticketController.Open,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodPost,
+		Path:        "/tickets/:id/get",
+		Handler:     ticketController.Get,
 		Middlewares: []Middleware{authMiddleware.Handle},
 	})
 

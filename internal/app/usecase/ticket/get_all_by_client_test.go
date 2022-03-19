@@ -24,7 +24,7 @@ func TestGetAllByClient(t *testing.T) {
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllByClientInput{ClientID: client.ID, LoggedUser: *client}
+		input := GetAllByClientInput{ClientID: client.ID, LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -47,7 +47,7 @@ func TestGetAllByClient(t *testing.T) {
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllByClientInput{ClientID: clientOther.ID, LoggedUser: *operator}
+		input := GetAllByClientInput{ClientID: clientOther.ID, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -68,7 +68,7 @@ func TestGetAllByClient(t *testing.T) {
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllByClientInput{ClientID: clientOther.ID, LoggedUser: *client}
+		input := GetAllByClientInput{ClientID: clientOther.ID, LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)

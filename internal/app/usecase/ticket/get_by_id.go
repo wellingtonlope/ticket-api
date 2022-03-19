@@ -2,6 +2,7 @@ package ticket
 
 import (
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
@@ -15,7 +16,7 @@ func NewGetByID(ticketRepository repository.TicketRepository) *GetByID {
 
 type GetByIDInput struct {
 	TicketID   string
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 func (u *GetByID) Handle(input GetByIDInput) (*TicketOutput, error) {
@@ -25,7 +26,7 @@ func (u *GetByID) Handle(input GetByIDInput) (*TicketOutput, error) {
 		return nil, err
 	}
 
-	if ticket.Client.ID != loggedUser.ID && loggedUser.Profile != domain.PROFILE_OPERATOR {
+	if ticket.Client.ID != loggedUser.ID && loggedUser.Profile != string(domain.PROFILE_OPERATOR) {
 		return nil, repository.ErrTicketNotFound
 	}
 

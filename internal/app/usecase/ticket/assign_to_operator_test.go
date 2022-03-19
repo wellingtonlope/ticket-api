@@ -27,7 +27,7 @@ func TestAssignToOperator(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: operatorOther.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: *operator}
+		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: operatorOther.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -61,7 +61,7 @@ func TestAssignToOperator(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: client.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: *operator}
+		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: client.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)
@@ -83,7 +83,7 @@ func TestAssignToOperator(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: operator.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: *client}
+		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: operator.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)
@@ -103,7 +103,7 @@ func TestAssignToOperator(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: "invalid-id", UpdatedAt: expectedUpdatedAt, LoggedUser: *operator}
+		input := AssignToOperatorInput{TicketID: ticket.ID, OperatorID: "invalid-id", UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)
@@ -123,7 +123,7 @@ func TestAssignToOperator(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := AssignToOperatorInput{TicketID: "invalid-id", OperatorID: operator.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: *operator}
+		input := AssignToOperatorInput{TicketID: "invalid-id", OperatorID: operator.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)

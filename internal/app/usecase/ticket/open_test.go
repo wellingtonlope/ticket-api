@@ -1,6 +1,7 @@
 package ticket
 
 import (
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"testing"
 	"time"
 
@@ -15,7 +16,7 @@ func TestOpen(t *testing.T) {
 	t.Run("should open ticket", func(t *testing.T) {
 		repo := &memory.TicketRepository{}
 		repoUser := &memory.UserRepository{}
-		uc := NewOpen(repo)
+		uc := NewOpen(repo, repoUser)
 
 		client, _ := repoUser.Insert(*client)
 
@@ -23,7 +24,7 @@ func TestOpen(t *testing.T) {
 			Title:       "title",
 			Description: "description",
 			CreatedAt:   time.Now(),
-			LoggedUser:  *client,
+			LoggedUser:  security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)
@@ -36,7 +37,6 @@ func TestOpen(t *testing.T) {
 		assert.Equal(t, string(domain.STATUS_OPEN), output.Status)
 		assert.Equal(t, input.LoggedUser.ID, output.Client.ID)
 		assert.Equal(t, input.LoggedUser.Name, output.Client.Name)
-		assert.Equal(t, input.LoggedUser.Email.String(), output.Client.Email)
 
 		ticket, err := repo.GetByID(output.ID)
 		assert.Nil(t, err)
@@ -54,7 +54,7 @@ func TestOpen(t *testing.T) {
 	t.Run("shouldn't open ticket when invalid input", func(t *testing.T) {
 		repo := &memory.TicketRepository{}
 		repoUser := &memory.UserRepository{}
-		uc := NewOpen(repo)
+		uc := NewOpen(repo, repoUser)
 
 		client, _ := repoUser.Insert(*client)
 
@@ -62,7 +62,7 @@ func TestOpen(t *testing.T) {
 			Title:       "",
 			Description: "",
 			CreatedAt:   time.Now(),
-			LoggedUser:  *client,
+			LoggedUser:  security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)

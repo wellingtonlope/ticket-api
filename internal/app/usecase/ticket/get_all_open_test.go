@@ -24,7 +24,7 @@ func TestGetAllOpen(t *testing.T) {
 		ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllOpenInput{LoggedUser: *operator}
+		input := GetAllOpenInput{LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -47,7 +47,7 @@ func TestGetAllOpen(t *testing.T) {
 		ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllOpenInput{LoggedUser: *client}
+		input := GetAllOpenInput{LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)

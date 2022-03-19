@@ -15,11 +15,11 @@ func NewGetAll(ticketRepository repository.TicketRepository) *GetAll {
 }
 
 type GetAllInput struct {
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 func (u *GetAll) Handle(input GetAllInput) (*[]TicketOutput, error) {
-	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
+	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
 		return nil, security.ErrForbidden
 	}
 

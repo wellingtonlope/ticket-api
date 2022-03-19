@@ -21,11 +21,11 @@ type AssignToOperatorInput struct {
 	TicketID   string
 	OperatorID string
 	UpdatedAt  time.Time
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 func (u *AssignToOperator) Handle(input AssignToOperatorInput) (*TicketOutput, error) {
-	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
+	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
 		return nil, security.ErrForbidden
 	}
 

@@ -24,7 +24,7 @@ func TestClose(t *testing.T) {
 		ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
-		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: *operator}
+		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -54,7 +54,7 @@ func TestClose(t *testing.T) {
 		ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
-		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: *client}
+		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)
@@ -74,7 +74,7 @@ func TestClose(t *testing.T) {
 		ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
-		input := CloseInput{TicketID: "invalid-id", Solution: "solution", UpdatedAt: time.Now(), LoggedUser: *operator}
+		input := CloseInput{TicketID: "invalid-id", Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)

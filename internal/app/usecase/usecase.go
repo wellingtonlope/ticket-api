@@ -35,12 +35,12 @@ func GetUseCases(repositories repository.Repositories) (*AllUseCases, error) {
 		TicketAssignToOperator: ticket.NewAssignToOperator(repos.TicketRepository, repos.UserRepository),
 		TicketClose:            ticket.NewClose(repos.TicketRepository),
 		TicketDelete:           ticket.NewDelete(repos.TicketRepository),
-		TicketGet:              ticket.NewGet(repos.TicketRepository),
+		TicketGet:              ticket.NewGet(repos.TicketRepository, repos.UserRepository),
 		TicketGetAll:           ticket.NewGetAll(repos.TicketRepository),
 		TicketGetAllByClient:   ticket.NewGetAllByClient(repos.TicketRepository),
 		TicketGetAllByOperator: ticket.NewGetAllByOperator(repos.TicketRepository),
 		TicketGetAllOPen:       ticket.NewGetAllOpen(repos.TicketRepository),
 		TicketGetByID:          ticket.NewGetByID(repos.TicketRepository),
-		TicketOpen:             ticket.NewOpen(repos.TicketRepository),
+		TicketOpen:             ticket.NewOpen(repos.TicketRepository, repos.UserRepository),
 	}, nil
 }

@@ -16,7 +16,7 @@ func NewDelete(ticketRepository repository.TicketRepository) *Delete {
 
 type DeleteInput struct {
 	TicketID   string
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 type DeleteOutput struct{}

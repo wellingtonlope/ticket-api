@@ -20,11 +20,11 @@ type CloseInput struct {
 	TicketID   string
 	Solution   string
 	UpdatedAt  time.Time
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 func (u *Close) Handle(input CloseInput) (*TicketOutput, error) {
-	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
+	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
 		return nil, security.ErrForbidden
 	}
 

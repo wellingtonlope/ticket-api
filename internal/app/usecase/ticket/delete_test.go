@@ -25,7 +25,7 @@ func TestDelete(t *testing.T) {
 
 		input := DeleteInput{
 			TicketID:   ticket.ID,
-			LoggedUser: *client,
+			LoggedUser: security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)
@@ -54,7 +54,7 @@ func TestDelete(t *testing.T) {
 
 		input := DeleteInput{
 			TicketID:   ticket.ID,
-			LoggedUser: *client,
+			LoggedUser: security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)
@@ -78,7 +78,7 @@ func TestDelete(t *testing.T) {
 
 		input := DeleteInput{
 			TicketID:   ticket.ID,
-			LoggedUser: *operator,
+			LoggedUser: security.NewUser(*operator),
 		}
 
 		output, err := uc.Handle(input)

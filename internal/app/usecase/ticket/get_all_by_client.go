@@ -16,11 +16,11 @@ func NewGetAllByClient(ticketRepository repository.TicketRepository) *GetAllByCl
 
 type GetAllByClientInput struct {
 	ClientID   string
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 func (u *GetAllByClient) Handle(input GetAllByClientInput) (*[]TicketOutput, error) {
-	if input.ClientID != input.LoggedUser.ID && input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
+	if input.ClientID != input.LoggedUser.ID && input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
 		return nil, security.ErrForbidden
 	}
 

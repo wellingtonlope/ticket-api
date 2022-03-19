@@ -32,6 +32,11 @@ func (s *Server) Register(r http.Route) {
 			})
 		}
 
+		params := make(map[string]string)
+		for _, key := range c.ParamNames() {
+			params[key] = c.Param(key)
+		}
+
 		stackMiddleware := r.Handler
 		for _, middleware := range r.Middlewares {
 			stackMiddleware = middleware(stackMiddleware)
@@ -41,6 +46,7 @@ func (s *Server) Register(r http.Route) {
 		headers[http.AuthorizationHeader] = c.Request().Header.Get(http.AuthorizationHeader)
 		response := stackMiddleware(http.Request{
 			Header: headers,
+			Params: params,
 			Body:   string(bytes),
 		})
 

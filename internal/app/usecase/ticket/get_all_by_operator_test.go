@@ -28,7 +28,7 @@ func TestGetAllByOperator(t *testing.T) {
 		ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllByOperatorInput{OperatorID: operator.ID, LoggedUser: *operator}
+		input := GetAllByOperatorInput{OperatorID: operator.ID, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -50,7 +50,7 @@ func TestGetAllByOperator(t *testing.T) {
 		ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllByOperatorInput{OperatorID: operator.ID, LoggedUser: *client}
+		input := GetAllByOperatorInput{OperatorID: operator.ID, LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)

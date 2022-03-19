@@ -15,7 +15,7 @@ func TestGet(t *testing.T) {
 	t.Run("should get a ticket", func(t *testing.T) {
 		repo := &memory.TicketRepository{}
 		repoUser := &memory.UserRepository{}
-		uc := NewGet(repo)
+		uc := NewGet(repo, repoUser)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
 		operator.Profile = domain.PROFILE_OPERATOR
@@ -24,7 +24,7 @@ func TestGet(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := GetInput{TicketID: ticket.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: *operator}
+		input := GetInput{TicketID: ticket.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -48,14 +48,14 @@ func TestGet(t *testing.T) {
 	t.Run("should return an error when user is a client", func(t *testing.T) {
 		repo := &memory.TicketRepository{}
 		repoUser := &memory.UserRepository{}
-		uc := NewGet(repo)
+		uc := NewGet(repo, repoUser)
 
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetInput{TicketID: ticket.ID, LoggedUser: *client}
+		input := GetInput{TicketID: ticket.ID, LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)
@@ -66,7 +66,7 @@ func TestGet(t *testing.T) {
 	t.Run("should return an error when ticket not exists", func(t *testing.T) {
 		repo := &memory.TicketRepository{}
 		repoUser := &memory.UserRepository{}
-		uc := NewGet(repo)
+		uc := NewGet(repo, repoUser)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
 		operator.Profile = domain.PROFILE_OPERATOR
@@ -75,7 +75,7 @@ func TestGet(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := GetInput{TicketID: "invalid-id", UpdatedAt: expectedUpdatedAt, LoggedUser: *operator}
+		input := GetInput{TicketID: "invalid-id", UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)

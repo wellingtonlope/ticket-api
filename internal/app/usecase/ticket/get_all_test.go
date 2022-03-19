@@ -23,7 +23,7 @@ func TestGetAll(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllInput{LoggedUser: *operator}
+		input := GetAllInput{LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
@@ -42,7 +42,7 @@ func TestGetAll(t *testing.T) {
 		ticket, _ = repo.Insert(*ticket)
 		ticket, _ = repo.Insert(*ticket)
 
-		input := GetAllInput{LoggedUser: *client}
+		input := GetAllInput{LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)

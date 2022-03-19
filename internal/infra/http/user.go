@@ -34,13 +34,13 @@ type (
 func userResponseFromUserOutput(user *user.UserOutput) *UserResponse {
 	var updatedAt string
 	if user.UpdatedAt != nil {
-		updatedAt = user.UpdatedAt.Format("2006-01-02 15:04:05")
+		updatedAt = user.UpdatedAt.Format(DataFormat)
 	}
 	return &UserResponse{
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
-		CreatedAt: user.CreatedAt.Format("2006-01-02 15:04:05"),
+		CreatedAt: user.CreatedAt.Format(DataFormat),
 		UpdatedAt: updatedAt,
 	}
 }

@@ -16,11 +16,11 @@ func NewGetAllByOperator(ticketRepository repository.TicketRepository) *GetAllBy
 
 type GetAllByOperatorInput struct {
 	OperatorID string
-	LoggedUser domain.User
+	LoggedUser security.User
 }
 
 func (u *GetAllByOperator) Handle(input GetAllByOperatorInput) (*[]TicketOutput, error) {
-	if input.LoggedUser.Profile != domain.PROFILE_OPERATOR {
+	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
 		return nil, security.ErrForbidden
 	}
 
