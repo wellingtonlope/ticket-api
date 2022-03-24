@@ -88,9 +88,17 @@ func (h *Http) Start(port int) error {
 		Authenticator:     h.Authenticator,
 	}
 	ticketController := TicketController{
-		UCOpen:        h.UseCases.TicketOpen,
-		UCGet:         h.UseCases.TicketGet,
-		Authenticator: h.Authenticator,
+		UCOpen:             h.UseCases.TicketOpen,
+		UCGet:              h.UseCases.TicketGet,
+		UCClose:            h.UseCases.TicketClose,
+		UCAssignToOperator: h.UseCases.TicketAssignToOperator,
+		UCDelete:           h.UseCases.TicketDelete,
+		UCGetByID:          h.UseCases.TicketGetByID,
+		UCGetAll:           h.UseCases.TicketGetAll,
+		UCGetAllByClient:   h.UseCases.TicketGetAllByClient,
+		UCGetAllByOperator: h.UseCases.TicketGetAllByOperator,
+		UCGetAllOpen:       h.UseCases.TicketGetAllOpen,
+		Authenticator:      h.Authenticator,
 	}
 
 	h.Server.Register(Route{
@@ -119,6 +127,54 @@ func (h *Http) Start(port int) error {
 		Method:      http.MethodPost,
 		Path:        "/tickets/:id/get",
 		Handler:     ticketController.Get,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodPost,
+		Path:        "/tickets/:id/close",
+		Handler:     ticketController.Close,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodPost,
+		Path:        "/tickets/:id/assign/:idOperator",
+		Handler:     ticketController.AssignToOperator,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodDelete,
+		Path:        "/tickets/:id",
+		Handler:     ticketController.Delete,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodGet,
+		Path:        "/tickets/:id",
+		Handler:     ticketController.GetByID,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodGet,
+		Path:        "/tickets",
+		Handler:     ticketController.GetAll,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodGet,
+		Path:        "/tickets/client/:idClient",
+		Handler:     ticketController.GetAllByClient,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodGet,
+		Path:        "/tickets/operator/:idOperator",
+		Handler:     ticketController.GetAllByOperator,
+		Middlewares: []Middleware{authMiddleware.Handle},
+	})
+	h.Server.Register(Route{
+		Method:      http.MethodGet,
+		Path:        "/tickets/open",
+		Handler:     ticketController.GetAllOpen,
 		Middlewares: []Middleware{authMiddleware.Handle},
 	})
 

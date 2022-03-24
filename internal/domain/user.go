@@ -45,7 +45,7 @@ func UserRegister(name, email, password string, createdAt time.Time) (*User, err
 		Name:      name,
 		Email:     *emailVO,
 		Password:  *passwordVO,
-		Profile:   PROFILE_CLIENT,
+		Profile:   PROFILE_OPERATOR,
 		CreatedAt: &createdAt,
 	}, nil
 }

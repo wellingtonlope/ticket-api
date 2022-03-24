@@ -17,7 +17,7 @@ type AllUseCases struct {
 	TicketGetAll           *ticket.GetAll
 	TicketGetAllByClient   *ticket.GetAllByClient
 	TicketGetAllByOperator *ticket.GetAllByOperator
-	TicketGetAllOPen       *ticket.GetAllOpen
+	TicketGetAllOpen       *ticket.GetAllOpen
 	TicketGetByID          *ticket.GetByID
 	TicketOpen             *ticket.Open
 }
@@ -39,7 +39,7 @@ func GetUseCases(repositories repository.Repositories) (*AllUseCases, error) {
 		TicketGetAll:           ticket.NewGetAll(repos.TicketRepository),
 		TicketGetAllByClient:   ticket.NewGetAllByClient(repos.TicketRepository),
 		TicketGetAllByOperator: ticket.NewGetAllByOperator(repos.TicketRepository),
-		TicketGetAllOPen:       ticket.NewGetAllOpen(repos.TicketRepository),
+		TicketGetAllOpen:       ticket.NewGetAllOpen(repos.TicketRepository),
 		TicketGetByID:          ticket.NewGetByID(repos.TicketRepository),
 		TicketOpen:             ticket.NewOpen(repos.TicketRepository, repos.UserRepository),
 	}, nil
