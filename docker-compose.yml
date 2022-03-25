@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  todo-api:
+  ticket-api:
     container_name: ticket-api
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     environment:
@@ -19,7 +19,7 @@ services:
       - ticket-db
     networks:
       - ticket-network
-  todo-db:
+  ticket-db:
     container_name: ticket-db
     image: mongo:latest
     networks:

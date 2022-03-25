@@ -17,7 +17,7 @@ tags:
 - name: "ticket"
   description: "Ticket-related actions"
 paths:
-  /user/register:
+  /users/register:
     post:
       tags:
         - "user"
@@ -37,7 +37,7 @@ paths:
             $ref: "#/definitions/UserToken"
         "400":
           description: "Invalid inputs"
-  /user/login:
+  /users/login:
     post:
       tags:
         - "user"
@@ -57,7 +57,7 @@ paths:
             $ref: "#/definitions/UserToken"
         "400":
           description: "Invalid inputs"
-  /user/operators:
+  /users/operators:
     get:
       tags:
         - "user"
@@ -70,7 +70,7 @@ paths:
             $ref: "#/definitions/User"
       security:
       - Token: []
-  /ticket:
+  /tickets:
     post:
       tags:
         - "ticket"
@@ -104,7 +104,7 @@ paths:
               $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/{id}/get:
+  /tickets/{id}/get:
     post:
       tags:
         - "ticket"
@@ -123,7 +123,7 @@ paths:
             $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/{id}/close:
+  /tickets/{id}/close:
     post:
       tags:
         - "ticket"
@@ -148,7 +148,7 @@ paths:
             $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/{id}/assign/{idOperator}:
+  /tickets/{id}/assign/{idOperator}:
     post:
       tags:
         - "ticket"
@@ -172,7 +172,7 @@ paths:
             $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/{id}:
+  /tickets/{id}:
     delete:
       tags:
         - "ticket"
@@ -207,7 +207,7 @@ paths:
             $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/client/{idClient}:
+  /tickets/client/{idClient}:
     get:
       tags:
         - "ticket"
@@ -228,7 +228,7 @@ paths:
               $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/operator/{idOperator}:
+  /tickets/operator/{idOperator}:
     get:
       tags:
         - "ticket"
@@ -249,7 +249,7 @@ paths:
               $ref: "#/definitions/Ticket"
       security:
         - Token: [ ]
-  /ticket/open:
+  /tickets/open:
     get:
       tags:
         - "ticket"
