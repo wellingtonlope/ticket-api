@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"github.com/wellingtonlope/ticket-api/docs"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase"
 	"net/http"
@@ -46,6 +47,7 @@ var (
 
 type Server interface {
 	Register(r Route)
+	RegisterSwagger(file []byte)
 	Start(port int) error
 }
 
@@ -177,6 +179,7 @@ func (h *Http) Start(port int) error {
 		Handler:     ticketController.GetAllOpen,
 		Middlewares: []Middleware{authMiddleware.Handle},
 	})
+	h.Server.RegisterSwagger(docs.OpenApiYaml)
 
 	return h.Server.Start(port)
 }

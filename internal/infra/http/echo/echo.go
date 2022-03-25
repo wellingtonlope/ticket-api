@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/wellingtonlope/ticket-api/internal/infra/http"
 	httpGO "net/http"
 )
@@ -14,6 +15,15 @@ type Server struct {
 
 func (s *Server) Start(port int) error {
 	return s.Echo.Start(fmt.Sprintf(":%d", port))
+}
+
+func (s *Server) RegisterSwagger(file []byte) {
+	s.Echo.GET("/swagger/*", echoSwagger.EchoWrapHandler(func(c *echoSwagger.Config) {
+		c.URL = "/swagger/openapi.yaml"
+	}))
+	s.Echo.GET("/swagger/openapi.yaml", func(c echo.Context) error {
+		return c.Blob(httpGO.StatusOK, "application/yaml", file)
+	})
 }
 
 func (s *Server) Register(r http.Route) {
