@@ -19,8 +19,8 @@ type GetAllByOperatorInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetAllByOperator) Handle(input GetAllByOperatorInput) (*[]TicketOutput, error) {
-	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
+func (u *GetAllByOperator) Handle(input GetAllByOperatorInput) (*[]Output, error) {
+	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}
 

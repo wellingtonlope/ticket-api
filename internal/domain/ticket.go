@@ -8,14 +8,14 @@ import (
 type Status string
 
 const (
-	STATUS_OPEN        Status = "OPEN"
-	STATUS_IN_PROGRESS Status = "IN_PROGRESS"
-	STATUS_CLOSE       Status = "CLOSE"
+	StatusOpen       Status = "OPEN"
+	StatusInProgress Status = "IN_PROGRESS"
+	StatusClose      Status = "CLOSE"
 )
 
 var (
 	ErrTicketNoOperator     = errors.New("operator must be an operator")
-	ErrTicketTitleIsInvalid = errors.New("title musn't be empty")
+	ErrTicketTitleIsInvalid = errors.New("title mustn't be empty")
 	ErrTicketNoGetToClose   = errors.New("first you need to get a ticket")
 )
 
@@ -45,7 +45,7 @@ func OpenTicket(title, description string, createdAt time.Time, client User) (*T
 	return &Ticket{
 		Title:       title,
 		Description: description,
-		Status:      STATUS_OPEN,
+		Status:      StatusOpen,
 		Client: &TicketUser{
 			ID:    client.ID,
 			Name:  client.Name,
@@ -56,7 +56,7 @@ func OpenTicket(title, description string, createdAt time.Time, client User) (*T
 }
 
 func (t *Ticket) Get(operator User, updatedAt time.Time) error {
-	if operator.Profile != PROFILE_OPERATOR {
+	if operator.Profile != ProfileOperator {
 		return ErrTicketNoOperator
 	}
 
@@ -66,7 +66,7 @@ func (t *Ticket) Get(operator User, updatedAt time.Time) error {
 		Email: operator.Email,
 	}
 	t.UpdatedAt = &updatedAt
-	t.Status = STATUS_IN_PROGRESS
+	t.Status = StatusInProgress
 
 	return nil
 }
@@ -78,7 +78,7 @@ func (t *Ticket) Close(solution string, updatedAt time.Time) error {
 
 	t.Solution = solution
 	t.UpdatedAt = &updatedAt
-	t.Status = STATUS_CLOSE
+	t.Status = StatusClose
 
 	return nil
 }

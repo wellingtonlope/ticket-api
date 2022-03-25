@@ -38,7 +38,7 @@ func TestGetAllByClient(t *testing.T) {
 		uc := NewGetAllByClient(repo)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		clientOther, _ := domain.UserRegister("clientOther", "clientOther@mail.com", "password", time.Now())
 		clientOther, _ = repoUser.Insert(*clientOther)

@@ -24,7 +24,7 @@ type OpenInput struct {
 	LoggedUser  security.User
 }
 
-func (u *Open) Handle(input OpenInput) (*TicketOutput, error) {
+func (u *Open) Handle(input OpenInput) (*Output, error) {
 	user, err := u.userRepository.GetByID(input.LoggedUser.ID)
 	if err != nil {
 		return nil, err

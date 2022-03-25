@@ -17,11 +17,11 @@ func TestGetAllOpen(t *testing.T) {
 		uc := NewGetAllOpen(repo)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		ticket, _ = repo.Insert(*ticket)
-		ticket.Get(*operator, time.Now())
+		_ = ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
 		input := GetAllOpenInput{LoggedUser: security.NewUser(*operator)}
@@ -38,13 +38,13 @@ func TestGetAllOpen(t *testing.T) {
 		uc := NewGetAllOpen(repo)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		ticket, _ = repo.Insert(*ticket)
-		ticket.Get(*operator, time.Now())
+		_ = ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
 		input := GetAllOpenInput{LoggedUser: security.NewUser(*client)}

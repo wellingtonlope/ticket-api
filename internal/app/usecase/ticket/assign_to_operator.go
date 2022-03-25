@@ -24,8 +24,8 @@ type AssignToOperatorInput struct {
 	LoggedUser security.User
 }
 
-func (u *AssignToOperator) Handle(input AssignToOperatorInput) (*TicketOutput, error) {
-	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
+func (u *AssignToOperator) Handle(input AssignToOperatorInput) (*Output, error) {
+	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}
 

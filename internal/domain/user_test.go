@@ -17,7 +17,7 @@ func TestRegisterUser(t *testing.T) {
 		assert.Equal(t, name, user.Name)
 		assert.Equal(t, email, user.Email.String())
 		assert.True(t, user.Password.IsCorrectPassword(password))
-		assert.Equal(t, PROFILE_CLIENT, user.Profile)
+		assert.Equal(t, ProfileClient, user.Profile)
 		assert.Equal(t, createdAt, *user.CreatedAt)
 	})
 

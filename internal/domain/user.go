@@ -6,14 +6,14 @@ import (
 )
 
 var (
-	ErrNameIsInvalid = errors.New("name musn't be empty")
+	ErrNameIsInvalid = errors.New("name mustn't be empty")
 )
 
 type Profile string
 
 const (
-	PROFILE_OPERATOR Profile = "OPERATOR"
-	PROFILE_CLIENT   Profile = "CLIENT"
+	ProfileOperator Profile = "OPERATOR"
+	ProfileClient   Profile = "CLIENT"
 )
 
 type User struct {
@@ -45,7 +45,7 @@ func UserRegister(name, email, password string, createdAt time.Time) (*User, err
 		Name:      name,
 		Email:     *emailVO,
 		Password:  *passwordVO,
-		Profile:   PROFILE_CLIENT,
+		Profile:   ProfileClient,
 		CreatedAt: &createdAt,
 	}, nil
 }

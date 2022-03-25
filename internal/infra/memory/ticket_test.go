@@ -74,7 +74,7 @@ func TestTicketRepository_Insert(t *testing.T) {
 func TestTicketRepository_Update(t *testing.T) {
 	userClientFixture, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 	operatorClientFixture, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-	operatorClientFixture.Profile = domain.PROFILE_OPERATOR
+	operatorClientFixture.Profile = domain.ProfileOperator
 	ticketFixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
 
 	t.Run("should update a ticket", func(t *testing.T) {
@@ -82,7 +82,7 @@ func TestTicketRepository_Update(t *testing.T) {
 		ticket, _ := repo.Insert(*ticketFixture)
 
 		expectedUpdatedAt := time.Now()
-		ticket.Get(*operatorClientFixture, expectedUpdatedAt)
+		_ = ticket.Get(*operatorClientFixture, expectedUpdatedAt)
 
 		got, err := repo.Update(*ticket)
 
@@ -128,10 +128,10 @@ func TestTicketRepository_GetAll(t *testing.T) {
 func TestTicketRepository_GetAllOpen(t *testing.T) {
 	userClientFixture, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 	operatorFixture, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-	operatorFixture.Profile = domain.PROFILE_OPERATOR
+	operatorFixture.Profile = domain.ProfileOperator
 	ticketOpenFixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
 	ticketGetFixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
-	ticketGetFixture.Get(*operatorFixture, time.Now())
+	_ = ticketGetFixture.Get(*operatorFixture, time.Now())
 
 	t.Run("should get all open tickets", func(t *testing.T) {
 		repo := &TicketRepository{}
@@ -149,15 +149,15 @@ func TestTicketRepository_GetAllOpen(t *testing.T) {
 func TestTicketRepository_GetAllByOperatorID(t *testing.T) {
 	userClientFixture, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 	operator1Fixture, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-	operator1Fixture.Profile = domain.PROFILE_OPERATOR
+	operator1Fixture.Profile = domain.ProfileOperator
 	operator1Fixture.ID = "operator1"
 	operator2Fixture, _ := domain.UserRegister("operator2", "operator2@mail.com", "password", time.Now())
 	operator2Fixture.ID = "operator2"
-	operator2Fixture.Profile = domain.PROFILE_OPERATOR
+	operator2Fixture.Profile = domain.ProfileOperator
 	ticket1Fixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
-	ticket1Fixture.Get(*operator1Fixture, time.Now())
+	_ = ticket1Fixture.Get(*operator1Fixture, time.Now())
 	ticket2Fixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
-	ticket2Fixture.Get(*operator2Fixture, time.Now())
+	_ = ticket2Fixture.Get(*operator2Fixture, time.Now())
 
 	t.Run("should get all open tickets", func(t *testing.T) {
 		repo := &TicketRepository{}

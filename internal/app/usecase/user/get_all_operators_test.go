@@ -12,9 +12,9 @@ import (
 
 func TestGetAllOperators(t *testing.T) {
 	operator1, _ := domain.UserRegister("operator1", "operator1@mail.com", "password", time.Now())
-	operator1.Profile = domain.PROFILE_OPERATOR
+	operator1.Profile = domain.ProfileOperator
 	operator2, _ := domain.UserRegister("operator2", "operator2@mail.com", "password", time.Now())
-	operator2.Profile = domain.PROFILE_OPERATOR
+	operator2.Profile = domain.ProfileOperator
 	client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 
 	t.Run("should return all operators", func(t *testing.T) {

@@ -18,8 +18,8 @@ type GetAllOperatorsInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetAllOperators) Handle(input GetAllOperatorsInput) (*[]UserOutput, error) {
-	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
+func (u *GetAllOperators) Handle(input GetAllOperatorsInput) (*[]Output, error) {
+	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}
 

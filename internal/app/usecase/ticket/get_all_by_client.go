@@ -19,8 +19,8 @@ type GetAllByClientInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetAllByClient) Handle(input GetAllByClientInput) (*[]TicketOutput, error) {
-	if input.ClientID != input.LoggedUser.ID && input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
+func (u *GetAllByClient) Handle(input GetAllByClientInput) (*[]Output, error) {
+	if input.ClientID != input.LoggedUser.ID && input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}
 

@@ -18,7 +18,7 @@ func TestGet(t *testing.T) {
 		uc := NewGet(repo, repoUser)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		ticket, _ = repo.Insert(*ticket)
@@ -30,14 +30,14 @@ func TestGet(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
 		assert.Equal(t, ticket.ID, output.ID)
-		assert.Equal(t, string(domain.STATUS_IN_PROGRESS), output.Status)
+		assert.Equal(t, string(domain.StatusInProgress), output.Status)
 		assert.Equal(t, expectedUpdatedAt, *output.UpdatedAt)
 		assert.Equal(t, operator.ID, output.Operator.ID)
 		assert.Equal(t, operator.Name, output.Operator.Name)
 		assert.Equal(t, operator.Email.String(), output.Operator.Email)
 
 		ticketRepo, _ := repo.GetByID(ticket.ID)
-		assert.Equal(t, domain.STATUS_IN_PROGRESS, ticketRepo.Status)
+		assert.Equal(t, domain.StatusInProgress, ticketRepo.Status)
 		assert.Equal(t, expectedUpdatedAt, *ticketRepo.UpdatedAt)
 		assert.Equal(t, operator.ID, ticketRepo.Operator.ID)
 		assert.Equal(t, operator.Name, ticketRepo.Operator.Name)
@@ -69,7 +69,7 @@ func TestGet(t *testing.T) {
 		uc := NewGet(repo, repoUser)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		ticket, _ = repo.Insert(*ticket)

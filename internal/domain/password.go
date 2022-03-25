@@ -28,7 +28,7 @@ func NewPassword(password string) (*Password, error) {
 }
 
 func NewPasswordHashed(hashedPassword string) (*Password, error) {
-	return &Password{string(hashedPassword)}, nil
+	return &Password{hashedPassword}, nil
 }
 
 func (p *Password) String() string {

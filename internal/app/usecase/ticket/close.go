@@ -23,8 +23,8 @@ type CloseInput struct {
 	LoggedUser security.User
 }
 
-func (u *Close) Handle(input CloseInput) (*TicketOutput, error) {
-	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
+func (u *Close) Handle(input CloseInput) (*Output, error) {
+	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}
 

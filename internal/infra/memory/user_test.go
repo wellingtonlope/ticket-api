@@ -106,14 +106,14 @@ func TestUserRepository_GetByEmail(t *testing.T) {
 
 func TestUserRepository_GetAllOperator(t *testing.T) {
 	userOperatorFixture, _ := domain.UserRegister("name", "operator@mail.com", "password", time.Now())
-	userOperatorFixture.Profile = domain.PROFILE_OPERATOR
+	userOperatorFixture.Profile = domain.ProfileOperator
 	userClientFixture, _ := domain.UserRegister("name", "client@mail.com", "password", time.Now())
 
 	t.Run("should get all operator users", func(t *testing.T) {
 		repo := &UserRepository{}
-		repo.Insert(*userOperatorFixture)
-		repo.Insert(*userOperatorFixture)
-		repo.Insert(*userClientFixture)
+		_, _ = repo.Insert(*userOperatorFixture)
+		_, _ = repo.Insert(*userOperatorFixture)
+		_, _ = repo.Insert(*userClientFixture)
 
 		got, err := repo.GetAllOperator()
 

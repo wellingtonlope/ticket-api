@@ -36,7 +36,7 @@ type (
 	}
 )
 
-func ticketUserResponseFromUserOutput(output *ticket.TicketUserOutput) *TicketUserResponse {
+func ticketUserResponseFromUserOutput(output *ticket.UserOutput) *TicketUserResponse {
 	if output == nil {
 		return nil
 	}
@@ -48,7 +48,7 @@ func ticketUserResponseFromUserOutput(output *ticket.TicketUserOutput) *TicketUs
 	}
 }
 
-func ticketResponseFromOutput(output *ticket.TicketOutput) *TicketResponse {
+func ticketResponseFromOutput(output *ticket.Output) *TicketResponse {
 	var updatedAt string
 	if output.UpdatedAt != nil {
 		updatedAt = output.UpdatedAt.Format(DataFormat)
@@ -66,7 +66,7 @@ func ticketResponseFromOutput(output *ticket.TicketOutput) *TicketResponse {
 	}
 }
 
-func ticketsReponseFromOutputs(outputs *[]ticket.TicketOutput) *[]TicketResponse {
+func ticketsResponseFromOutputs(outputs *[]ticket.Output) *[]TicketResponse {
 	responses := make([]TicketResponse, 0, len(*outputs))
 	for _, output := range *outputs {
 		responses = append(responses, *ticketResponseFromOutput(&output))
@@ -289,7 +289,7 @@ func (c *TicketController) GetAll(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsReponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(output)),
 	}
 }
 
@@ -314,7 +314,7 @@ func (c *TicketController) GetAllByClient(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsReponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(output)),
 	}
 }
 
@@ -339,7 +339,7 @@ func (c *TicketController) GetAllByOperator(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsReponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(output)),
 	}
 }
 
@@ -363,6 +363,6 @@ func (c *TicketController) GetAllOpen(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsReponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(output)),
 	}
 }

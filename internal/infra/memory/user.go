@@ -41,14 +41,10 @@ func (r *UserRepository) GetAllOperator() (*[]domain.User, error) {
 	operators := make([]domain.User, 0, 10)
 
 	for _, user := range r.users {
-		if user.Profile == domain.PROFILE_OPERATOR {
+		if user.Profile == domain.ProfileOperator {
 			operators = append(operators, user)
 		}
 	}
 
 	return &operators, nil
-}
-
-func (r *UserRepository) DeleteByID(id string) error {
-	return nil
 }

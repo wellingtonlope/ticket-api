@@ -149,7 +149,6 @@ func (r *TicketRepository) GetAll() (*[]domain.Ticket, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer cur.Close(context.Background())
 
 	for cur.Next(context.Background()) {
 		ticket := Ticket{}
@@ -158,17 +157,22 @@ func (r *TicketRepository) GetAll() (*[]domain.Ticket, error) {
 		}
 		tickets = append(tickets, *ticket.toDomain())
 	}
+
+	err = cur.Close(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	return &tickets, nil
 }
 
 func (r *TicketRepository) GetAllOpen() (*[]domain.Ticket, error) {
 	var tickets []domain.Ticket
 
-	cur, err := r.Collection.Find(context.Background(), bson.M{"status": domain.STATUS_OPEN})
+	cur, err := r.Collection.Find(context.Background(), bson.M{"status": domain.StatusOpen})
 	if err != nil {
 		return nil, err
 	}
-	defer cur.Close(context.Background())
 
 	for cur.Next(context.Background()) {
 		ticket := Ticket{}
@@ -177,6 +181,12 @@ func (r *TicketRepository) GetAllOpen() (*[]domain.Ticket, error) {
 		}
 		tickets = append(tickets, *ticket.toDomain())
 	}
+
+	err = cur.Close(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	return &tickets, nil
 }
 
@@ -187,7 +197,6 @@ func (r *TicketRepository) GetAllByOperatorID(operatorID string) (*[]domain.Tick
 	if err != nil {
 		return nil, err
 	}
-	defer cur.Close(context.Background())
 
 	for cur.Next(context.Background()) {
 		ticket := Ticket{}
@@ -196,6 +205,12 @@ func (r *TicketRepository) GetAllByOperatorID(operatorID string) (*[]domain.Tick
 		}
 		tickets = append(tickets, *ticket.toDomain())
 	}
+
+	err = cur.Close(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	return &tickets, nil
 }
 
@@ -206,7 +221,6 @@ func (r *TicketRepository) GetAllByClientID(clientID string) (*[]domain.Ticket, 
 	if err != nil {
 		return nil, err
 	}
-	defer cur.Close(context.Background())
 
 	for cur.Next(context.Background()) {
 		ticket := Ticket{}
@@ -215,6 +229,12 @@ func (r *TicketRepository) GetAllByClientID(clientID string) (*[]domain.Ticket, 
 		}
 		tickets = append(tickets, *ticket.toDomain())
 	}
+
+	err = cur.Close(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	return &tickets, nil
 }
 

@@ -18,10 +18,10 @@ func TestClose(t *testing.T) {
 		uc := NewClose(repo)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		ticket.Get(*operator, time.Now())
+		_ = ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
 		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
@@ -30,12 +30,12 @@ func TestClose(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
 		assert.Equal(t, ticket.ID, output.ID)
-		assert.Equal(t, string(domain.STATUS_CLOSE), output.Status)
+		assert.Equal(t, string(domain.StatusClose), output.Status)
 		assert.Equal(t, input.UpdatedAt, *output.UpdatedAt)
 		assert.Equal(t, input.Solution, output.Solution)
 
 		ticketRepo, _ := repo.GetByID(ticket.ID)
-		assert.Equal(t, domain.STATUS_CLOSE, ticketRepo.Status)
+		assert.Equal(t, domain.StatusClose, ticketRepo.Status)
 		assert.Equal(t, input.UpdatedAt, *ticketRepo.UpdatedAt)
 		assert.Equal(t, input.Solution, output.Solution)
 	})
@@ -46,12 +46,12 @@ func TestClose(t *testing.T) {
 		uc := NewClose(repo)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		ticket.Get(*operator, time.Now())
+		_ = ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
 		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*client)}
@@ -68,10 +68,10 @@ func TestClose(t *testing.T) {
 		uc := NewClose(repo)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		ticket.Get(*operator, time.Now())
+		_ = ticket.Get(*operator, time.Now())
 		ticket, _ = repo.Insert(*ticket)
 
 		input := CloseInput{TicketID: "invalid-id", Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}

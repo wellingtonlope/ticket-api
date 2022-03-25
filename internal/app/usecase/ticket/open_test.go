@@ -34,7 +34,7 @@ func TestOpen(t *testing.T) {
 		assert.Equal(t, input.Title, output.Title)
 		assert.Equal(t, input.Description, output.Description)
 		assert.Equal(t, input.CreatedAt, *output.CreatedAt)
-		assert.Equal(t, string(domain.STATUS_OPEN), output.Status)
+		assert.Equal(t, string(domain.StatusOpen), output.Status)
 		assert.Equal(t, input.LoggedUser.ID, output.Client.ID)
 		assert.Equal(t, input.LoggedUser.Name, output.Client.Name)
 
@@ -45,7 +45,7 @@ func TestOpen(t *testing.T) {
 		assert.Equal(t, output.Title, ticket.Title)
 		assert.Equal(t, output.Description, ticket.Description)
 		assert.Equal(t, output.CreatedAt, ticket.CreatedAt)
-		assert.Equal(t, domain.STATUS_OPEN, ticket.Status)
+		assert.Equal(t, domain.StatusOpen, ticket.Status)
 		assert.Equal(t, output.Client.ID, ticket.Client.ID)
 		assert.Equal(t, output.Client.Name, ticket.Client.Name)
 		assert.Equal(t, output.Client.Email, ticket.Client.Email.String())

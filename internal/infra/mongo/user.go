@@ -112,11 +112,10 @@ func (r *UserRepository) GetByEmail(email string) (*domain.User, error) {
 
 func (r *UserRepository) GetAllOperator() (*[]domain.User, error) {
 	var users []domain.User
-	cur, err := r.Collection.Find(context.Background(), bson.M{"profile": domain.PROFILE_OPERATOR})
+	cur, err := r.Collection.Find(context.Background(), bson.M{"profile": domain.ProfileOperator})
 	if err != nil {
 		return nil, err
 	}
-	defer cur.Close(context.Background())
 
 	for cur.Next(context.Background()) {
 		user := User{}
@@ -125,5 +124,11 @@ func (r *UserRepository) GetAllOperator() (*[]domain.User, error) {
 		}
 		users = append(users, *user.toDomain())
 	}
+
+	err = cur.Close(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	return &users, nil
 }

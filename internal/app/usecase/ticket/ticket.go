@@ -6,35 +6,35 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type TicketUserOutput struct {
+type UserOutput struct {
 	ID    string
 	Name  string
 	Email string
 }
 
-type TicketOutput struct {
+type Output struct {
 	ID          string
 	Title       string
 	Description string
 	Solution    string
 	Status      string
-	Client      *TicketUserOutput
-	Operator    *TicketUserOutput
+	Client      *UserOutput
+	Operator    *UserOutput
 	CreatedAt   *time.Time
 	UpdatedAt   *time.Time
 }
 
-func ticketOutputFromTicket(ticket *domain.Ticket) *TicketOutput {
-	var operator *TicketUserOutput
+func ticketOutputFromTicket(ticket *domain.Ticket) *Output {
+	var operator *UserOutput
 	if ticket.Operator != nil {
-		operator = &TicketUserOutput{
+		operator = &UserOutput{
 			ID:    ticket.Operator.ID,
 			Name:  ticket.Operator.Name,
 			Email: ticket.Operator.Email.String(),
 		}
 	}
 
-	return &TicketOutput{
+	return &Output{
 		ID:          ticket.ID,
 		Title:       ticket.Title,
 		Description: ticket.Description,
@@ -42,7 +42,7 @@ func ticketOutputFromTicket(ticket *domain.Ticket) *TicketOutput {
 		Status:      string(ticket.Status),
 		CreatedAt:   ticket.CreatedAt,
 		UpdatedAt:   ticket.UpdatedAt,
-		Client: &TicketUserOutput{
+		Client: &UserOutput{
 			ID:    ticket.Client.ID,
 			Name:  ticket.Client.Name,
 			Email: ticket.Client.Email.String(),
@@ -51,8 +51,8 @@ func ticketOutputFromTicket(ticket *domain.Ticket) *TicketOutput {
 	}
 }
 
-func ticketsOutputsFromTickets(tickets *[]domain.Ticket) *[]TicketOutput {
-	outputs := make([]TicketOutput, 0, len(*tickets))
+func ticketsOutputsFromTickets(tickets *[]domain.Ticket) *[]Output {
+	outputs := make([]Output, 0, len(*tickets))
 	for _, ticket := range *tickets {
 		outputs = append(outputs, *ticketOutputFromTicket(&ticket))
 	}

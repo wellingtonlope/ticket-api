@@ -6,7 +6,7 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type UserOutput struct {
+type Output struct {
 	ID        string
 	Name      string
 	Email     string
@@ -15,8 +15,8 @@ type UserOutput struct {
 	UpdatedAt *time.Time
 }
 
-func userOutputFromUser(user *domain.User) *UserOutput {
-	return &UserOutput{
+func userOutputFromUser(user *domain.User) *Output {
+	return &Output{
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email.String(),
@@ -26,8 +26,8 @@ func userOutputFromUser(user *domain.User) *UserOutput {
 	}
 }
 
-func usersOutputsFromUsers(users *[]domain.User) *[]UserOutput {
-	outputs := make([]UserOutput, 0, len(*users))
+func usersOutputsFromUsers(users *[]domain.User) *[]Output {
+	outputs := make([]Output, 0, len(*users))
 	for _, user := range *users {
 		outputs = append(outputs, *userOutputFromUser(&user))
 	}

@@ -19,14 +19,14 @@ type GetByIDInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetByID) Handle(input GetByIDInput) (*TicketOutput, error) {
+func (u *GetByID) Handle(input GetByIDInput) (*Output, error) {
 	loggedUser := input.LoggedUser
 	ticket, err := u.ticketRepository.GetByID(input.TicketID)
 	if err != nil {
 		return nil, err
 	}
 
-	if ticket.Client.ID != loggedUser.ID && loggedUser.Profile != string(domain.PROFILE_OPERATOR) {
+	if ticket.Client.ID != loggedUser.ID && loggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, repository.ErrTicketNotFound
 	}
 

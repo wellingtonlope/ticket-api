@@ -33,7 +33,7 @@ func TestNewPassword(t *testing.T) {
 	})
 }
 
-func TestIsCorrrectPassword(t *testing.T) {
+func TestIsCorrectPassword(t *testing.T) {
 	t.Run("should return true when password is correct", func(t *testing.T) {
 		expectedPassword := "password"
 		got, err := NewPassword(expectedPassword)

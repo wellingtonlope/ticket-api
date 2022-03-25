@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	ErrUserEmailPasswordWrong = errors.New("Email or password is wrong")
+	ErrUserEmailPasswordWrong = errors.New("email or password is wrong")
 )
 
 type Login struct {
@@ -23,7 +23,7 @@ type LoginInput struct {
 	Password string
 }
 
-func (u *Login) Handle(input LoginInput) (*UserOutput, error) {
+func (u *Login) Handle(input LoginInput) (*Output, error) {
 	user, err := u.userRepository.GetByEmail(input.Email)
 	if err != nil {
 		if err == repository.ErrUserNotFound {

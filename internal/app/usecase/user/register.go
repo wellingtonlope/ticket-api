@@ -27,7 +27,7 @@ type RegisterInput struct {
 	CreatedAt time.Time
 }
 
-func (u *Register) Handle(input RegisterInput) (*UserOutput, error) {
+func (u *Register) Handle(input RegisterInput) (*Output, error) {
 	user, err := u.userRepository.GetByEmail(input.Email)
 	if err != nil && err != repository.ErrUserNotFound {
 		return nil, err

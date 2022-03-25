@@ -31,7 +31,7 @@ type (
 	}
 )
 
-func userResponseFromUserOutput(user *user.UserOutput) *UserResponse {
+func userResponseFromUserOutput(user *user.Output) *UserResponse {
 	var updatedAt string
 	if user.UpdatedAt != nil {
 		updatedAt = user.UpdatedAt.Format(DataFormat)
@@ -45,7 +45,7 @@ func userResponseFromUserOutput(user *user.UserOutput) *UserResponse {
 	}
 }
 
-func usersResponseFromUsersOutput(outputs *[]user.UserOutput) *[]UserResponse {
+func usersResponseFromUsersOutput(outputs *[]user.Output) *[]UserResponse {
 	response := make([]UserResponse, 0, len(*outputs))
 	for _, output := range *outputs {
 		response = append(response, *userResponseFromUserOutput(&output))

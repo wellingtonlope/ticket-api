@@ -18,8 +18,8 @@ type GetAllOpenInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetAllOpen) Handle(input GetAllOpenInput) (*[]TicketOutput, error) {
-	if input.LoggedUser.Profile != string(domain.PROFILE_OPERATOR) {
+func (u *GetAllOpen) Handle(input GetAllOpenInput) (*[]Output, error) {
+	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}
 

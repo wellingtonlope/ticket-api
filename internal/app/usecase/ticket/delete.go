@@ -31,7 +31,7 @@ func (u *Delete) Handle(input DeleteInput) (*DeleteOutput, error) {
 		return nil, security.ErrForbidden
 	}
 
-	if ticket.Status != domain.STATUS_OPEN {
+	if ticket.Status != domain.StatusOpen {
 		return nil, security.ErrForbidden
 	}
 

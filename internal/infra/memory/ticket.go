@@ -46,7 +46,7 @@ func (r *TicketRepository) GetAllOpen() (*[]domain.Ticket, error) {
 	var ticketsOpen []domain.Ticket
 
 	for _, ticket := range r.tickets {
-		if ticket.Status == domain.STATUS_OPEN {
+		if ticket.Status == domain.StatusOpen {
 			ticketsOpen = append(ticketsOpen, ticket)
 		}
 	}

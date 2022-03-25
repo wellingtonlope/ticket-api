@@ -17,7 +17,7 @@ func TestGetAll(t *testing.T) {
 		uc := NewGetAll(repo)
 
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
-		operator.Profile = domain.PROFILE_OPERATOR
+		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		ticket, _ = repo.Insert(*ticket)

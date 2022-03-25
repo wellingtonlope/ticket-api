@@ -23,7 +23,7 @@ type GetInput struct {
 	LoggedUser security.User
 }
 
-func (u *Get) Handle(input GetInput) (*TicketOutput, error) {
+func (u *Get) Handle(input GetInput) (*Output, error) {
 	ticket, err := u.ticketRepository.GetByID(input.TicketID)
 	if err != nil {
 		return nil, err
