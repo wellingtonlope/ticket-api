@@ -80,10 +80,10 @@ func (c *UserController) Register(request Request) Response {
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
-		case user.ErrUserAlreadyExists:
-		case domain.ErrNameIsInvalid:
-		case domain.ErrEmailIsInvalid:
-		case domain.ErrPasswordIsInvalid:
+		case user.ErrUserAlreadyExists,
+			domain.ErrNameIsInvalid,
+			domain.ErrEmailIsInvalid,
+			domain.ErrPasswordIsInvalid:
 			httpStatus = http.StatusBadRequest
 		}
 		return Response{

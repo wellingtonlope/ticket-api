@@ -7,7 +7,7 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/infra/http"
 	"github.com/wellingtonlope/ticket-api/internal/infra/http/echo"
 	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
-	"github.com/wellingtonlope/ticket-api/internal/infra/memory"
+	"github.com/wellingtonlope/ticket-api/internal/infra/mongo"
 	"log"
 	"os"
 	"strconv"
@@ -19,7 +19,11 @@ func main() {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	useCases, err := usecase.GetUseCases(&memory.Repositories{})
+	useCases, err := usecase.GetUseCases(&mongo.Repositories{
+		UriConnection: os.Getenv("MONGO_URI"),
+		Database:      os.Getenv("MONGO_DATABASE"),
+	})
+
 	if err != nil {
 		log.Fatalf("Error getting use cases: %v", err)
 	}

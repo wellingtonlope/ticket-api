@@ -202,8 +202,7 @@ func (c *TicketController) AssignToOperator(request Request) Response {
 			httpStatus = http.StatusBadRequest
 		case security.ErrForbidden:
 			httpStatus = http.StatusForbidden
-		case repository.ErrTicketNotFound:
-		case repository.ErrUserNotFound:
+		case repository.ErrTicketNotFound, repository.ErrUserNotFound:
 			httpStatus = http.StatusNotFound
 		}
 		return Response{
