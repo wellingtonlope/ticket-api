@@ -8,12 +8,16 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type Close struct {
+type Close interface {
+	Handle(input CloseInput) (*Output, error)
+}
+
+type close struct {
 	ticketRepository repository.TicketRepository
 }
 
-func NewClose(ticketRepository repository.TicketRepository) *Close {
-	return &Close{ticketRepository: ticketRepository}
+func NewClose(ticketRepository repository.TicketRepository) *close {
+	return &close{ticketRepository: ticketRepository}
 }
 
 type CloseInput struct {
@@ -23,7 +27,7 @@ type CloseInput struct {
 	LoggedUser security.User
 }
 
-func (u *Close) Handle(input CloseInput) (*Output, error) {
+func (u *close) Handle(input CloseInput) (*Output, error) {
 	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}

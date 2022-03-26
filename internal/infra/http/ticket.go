@@ -78,16 +78,16 @@ func ticketsResponseFromOutputs(outputs []ticket.Output) *[]TicketResponse {
 }
 
 type TicketController struct {
-	UCOpen             *ticket.Open
-	UCGet              *ticket.Get
-	UCClose            *ticket.Close
-	UCAssignToOperator *ticket.AssignToOperator
-	UCDelete           *ticket.Delete
-	UCGetByID          *ticket.GetByID
-	UCGetAll           *ticket.GetAll
-	UCGetAllByClient   *ticket.GetAllByClient
-	UCGetAllByOperator *ticket.GetAllByOperator
-	UCGetAllOpen       *ticket.GetAllOpen
+	UCOpen             ticket.Open
+	UCGet              ticket.Get
+	UCClose            ticket.Close
+	UCAssignToOperator ticket.AssignToOperator
+	UCDelete           ticket.Delete
+	UCGetByID          ticket.GetByID
+	UCGetAll           ticket.GetAll
+	UCGetAllByClient   ticket.GetAllByClient
+	UCGetAllByOperator ticket.GetAllByOperator
+	UCGetAllOpen       ticket.GetAllOpen
 	Authenticator      security.Authenticator
 }
 

@@ -57,9 +57,9 @@ func usersResponseFromUsersOutput(outputs []user.Output) *[]UserResponse {
 }
 
 type UserController struct {
-	UCRegister        *user.Register
-	UCLogin           *user.Login
-	UCGetAllOperators *user.GetAllOperators
+	UCRegister        user.Register
+	UCLogin           user.Login
+	UCGetAllOperators user.GetAllOperators
 	Authenticator     security.Authenticator
 }
 

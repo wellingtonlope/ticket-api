@@ -8,13 +8,17 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type AssignToOperator struct {
+type AssignToOperator interface {
+	Handle(input AssignToOperatorInput) (*Output, error)
+}
+
+type assignToOperator struct {
 	ticketRepository repository.TicketRepository
 	userRepository   repository.UserRepository
 }
 
-func NewAssignToOperator(ticketRepository repository.TicketRepository, userRepository repository.UserRepository) *AssignToOperator {
-	return &AssignToOperator{ticketRepository: ticketRepository, userRepository: userRepository}
+func NewAssignToOperator(ticketRepository repository.TicketRepository, userRepository repository.UserRepository) AssignToOperator {
+	return &assignToOperator{ticketRepository: ticketRepository, userRepository: userRepository}
 }
 
 type AssignToOperatorInput struct {
@@ -24,7 +28,7 @@ type AssignToOperatorInput struct {
 	LoggedUser security.User
 }
 
-func (u *AssignToOperator) Handle(input AssignToOperatorInput) (*Output, error) {
+func (u *assignToOperator) Handle(input AssignToOperatorInput) (*Output, error) {
 	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}

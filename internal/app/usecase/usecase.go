@@ -7,19 +7,19 @@ import (
 )
 
 type AllUseCases struct {
-	UserGetAllOperators    *user.GetAllOperators
-	UserLogin              *user.Login
-	UserRegister           *user.Register
-	TicketAssignToOperator *ticket.AssignToOperator
-	TicketClose            *ticket.Close
-	TicketDelete           *ticket.Delete
-	TicketGet              *ticket.Get
-	TicketGetAll           *ticket.GetAll
-	TicketGetAllByClient   *ticket.GetAllByClient
-	TicketGetAllByOperator *ticket.GetAllByOperator
-	TicketGetAllOpen       *ticket.GetAllOpen
-	TicketGetByID          *ticket.GetByID
-	TicketOpen             *ticket.Open
+	UserGetAllOperators    user.GetAllOperators
+	UserLogin              user.Login
+	UserRegister           user.Register
+	TicketAssignToOperator ticket.AssignToOperator
+	TicketClose            ticket.Close
+	TicketDelete           ticket.Delete
+	TicketGet              ticket.Get
+	TicketGetAll           ticket.GetAll
+	TicketGetAllByClient   ticket.GetAllByClient
+	TicketGetAllByOperator ticket.GetAllByOperator
+	TicketGetAllOpen       ticket.GetAllOpen
+	TicketGetByID          ticket.GetByID
+	TicketOpen             ticket.Open
 }
 
 func GetUseCases(repositories repository.Repositories) (*AllUseCases, error) {

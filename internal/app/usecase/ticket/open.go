@@ -8,13 +8,17 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type Open struct {
+type Open interface {
+	Handle(input OpenInput) (*Output, error)
+}
+
+type open struct {
 	ticketRepository repository.TicketRepository
 	userRepository   repository.UserRepository
 }
 
-func NewOpen(ticketRepository repository.TicketRepository, userRepository repository.UserRepository) *Open {
-	return &Open{ticketRepository: ticketRepository, userRepository: userRepository}
+func NewOpen(ticketRepository repository.TicketRepository, userRepository repository.UserRepository) Open {
+	return &open{ticketRepository: ticketRepository, userRepository: userRepository}
 }
 
 type OpenInput struct {
@@ -24,7 +28,7 @@ type OpenInput struct {
 	LoggedUser  security.User
 }
 
-func (u *Open) Handle(input OpenInput) (*Output, error) {
+func (u *open) Handle(input OpenInput) (*Output, error) {
 	user, err := u.userRepository.GetByID(input.LoggedUser.ID)
 	if err != nil {
 		return nil, err

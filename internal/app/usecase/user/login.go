@@ -10,12 +10,16 @@ var (
 	ErrUserEmailPasswordWrong = errors.New("email or password is wrong")
 )
 
-type Login struct {
+type Login interface {
+	Handle(input LoginInput) (*Output, error)
+}
+
+type login struct {
 	userRepository repository.UserRepository
 }
 
-func NewLogin(userRepository repository.UserRepository) *Login {
-	return &Login{userRepository: userRepository}
+func NewLogin(userRepository repository.UserRepository) Login {
+	return &login{userRepository: userRepository}
 }
 
 type LoginInput struct {
@@ -23,7 +27,7 @@ type LoginInput struct {
 	Password string
 }
 
-func (u *Login) Handle(input LoginInput) (*Output, error) {
+func (u *login) Handle(input LoginInput) (*Output, error) {
 	user, err := u.userRepository.GetByEmail(input.Email)
 	if err != nil {
 		if err == repository.ErrUserNotFound {

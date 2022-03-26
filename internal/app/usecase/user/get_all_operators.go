@@ -6,19 +6,23 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type GetAllOperators struct {
+type GetAllOperators interface {
+	Handle(input GetAllOperatorsInput) (*[]Output, error)
+}
+
+type getAllOperators struct {
 	userRepository repository.UserRepository
 }
 
-func NewGetAllOperators(userRepository repository.UserRepository) *GetAllOperators {
-	return &GetAllOperators{userRepository: userRepository}
+func NewGetAllOperators(userRepository repository.UserRepository) GetAllOperators {
+	return &getAllOperators{userRepository: userRepository}
 }
 
 type GetAllOperatorsInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetAllOperators) Handle(input GetAllOperatorsInput) (*[]Output, error) {
+func (u *getAllOperators) Handle(input GetAllOperatorsInput) (*[]Output, error) {
 	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}

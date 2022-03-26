@@ -12,12 +12,16 @@ var (
 	ErrUserAlreadyExists = errors.New("user already exists")
 )
 
-type Register struct {
+type Register interface {
+	Handle(input RegisterInput) (*Output, error)
+}
+
+type register struct {
 	userRepository repository.UserRepository
 }
 
-func NewRegister(userRepository repository.UserRepository) *Register {
-	return &Register{userRepository: userRepository}
+func NewRegister(userRepository repository.UserRepository) Register {
+	return &register{userRepository: userRepository}
 }
 
 type RegisterInput struct {
@@ -27,7 +31,7 @@ type RegisterInput struct {
 	CreatedAt time.Time
 }
 
-func (u *Register) Handle(input RegisterInput) (*Output, error) {
+func (u *register) Handle(input RegisterInput) (*Output, error) {
 	user, err := u.userRepository.GetByEmail(input.Email)
 	if err != nil && err != repository.ErrUserNotFound {
 		return nil, err

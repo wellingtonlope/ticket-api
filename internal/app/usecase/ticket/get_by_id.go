@@ -6,12 +6,16 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type GetByID struct {
+type GetByID interface {
+	Handle(input GetByIDInput) (*Output, error)
+}
+
+type getByID struct {
 	ticketRepository repository.TicketRepository
 }
 
-func NewGetByID(ticketRepository repository.TicketRepository) *GetByID {
-	return &GetByID{ticketRepository: ticketRepository}
+func NewGetByID(ticketRepository repository.TicketRepository) GetByID {
+	return &getByID{ticketRepository: ticketRepository}
 }
 
 type GetByIDInput struct {
@@ -19,7 +23,7 @@ type GetByIDInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetByID) Handle(input GetByIDInput) (*Output, error) {
+func (u *getByID) Handle(input GetByIDInput) (*Output, error) {
 	loggedUser := input.LoggedUser
 	ticket, err := u.ticketRepository.GetByID(input.TicketID)
 	if err != nil {

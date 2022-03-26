@@ -6,12 +6,16 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type Delete struct {
+type Delete interface {
+	Handle(input DeleteInput) (*DeleteOutput, error)
+}
+
+type delete struct {
 	ticketRepository repository.TicketRepository
 }
 
-func NewDelete(ticketRepository repository.TicketRepository) *Delete {
-	return &Delete{ticketRepository: ticketRepository}
+func NewDelete(ticketRepository repository.TicketRepository) Delete {
+	return &delete{ticketRepository: ticketRepository}
 }
 
 type DeleteInput struct {
@@ -21,7 +25,7 @@ type DeleteInput struct {
 
 type DeleteOutput struct{}
 
-func (u *Delete) Handle(input DeleteInput) (*DeleteOutput, error) {
+func (u *delete) Handle(input DeleteInput) (*DeleteOutput, error) {
 	ticket, err := u.ticketRepository.GetByID(input.TicketID)
 	if err != nil {
 		return nil, err

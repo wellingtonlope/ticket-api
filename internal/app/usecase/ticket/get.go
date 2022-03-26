@@ -8,13 +8,17 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type Get struct {
+type Get interface {
+	Handle(input GetInput) (*Output, error)
+}
+
+type get struct {
 	ticketRepository repository.TicketRepository
 	userRepository   repository.UserRepository
 }
 
-func NewGet(ticketRepository repository.TicketRepository, userRepository repository.UserRepository) *Get {
-	return &Get{ticketRepository: ticketRepository, userRepository: userRepository}
+func NewGet(ticketRepository repository.TicketRepository, userRepository repository.UserRepository) Get {
+	return &get{ticketRepository: ticketRepository, userRepository: userRepository}
 }
 
 type GetInput struct {
@@ -23,7 +27,7 @@ type GetInput struct {
 	LoggedUser security.User
 }
 
-func (u *Get) Handle(input GetInput) (*Output, error) {
+func (u *get) Handle(input GetInput) (*Output, error) {
 	ticket, err := u.ticketRepository.GetByID(input.TicketID)
 	if err != nil {
 		return nil, err

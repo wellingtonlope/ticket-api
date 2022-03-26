@@ -6,19 +6,23 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-type GetAllOpen struct {
+type GetAllOpen interface {
+	Handle(input GetAllOpenInput) (*[]Output, error)
+}
+
+type getAllOpen struct {
 	ticketRepository repository.TicketRepository
 }
 
-func NewGetAllOpen(ticketRepository repository.TicketRepository) *GetAllOpen {
-	return &GetAllOpen{ticketRepository: ticketRepository}
+func NewGetAllOpen(ticketRepository repository.TicketRepository) GetAllOpen {
+	return &getAllOpen{ticketRepository: ticketRepository}
 }
 
 type GetAllOpenInput struct {
 	LoggedUser security.User
 }
 
-func (u *GetAllOpen) Handle(input GetAllOpenInput) (*[]Output, error) {
+func (u *getAllOpen) Handle(input GetAllOpenInput) (*[]Output, error) {
 	if input.LoggedUser.Profile != string(domain.ProfileOperator) {
 		return nil, security.ErrForbidden
 	}
