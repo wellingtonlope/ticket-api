@@ -52,3 +52,14 @@ func TestIsCorrectPassword(t *testing.T) {
 		assert.False(t, got.IsCorrectPassword("incorrect"))
 	})
 }
+
+func TestNewPasswordHashed(t *testing.T) {
+	t.Run("should return a new password with hashed string password", func(t *testing.T) {
+		expectedPassword := "password"
+		got, err := NewPasswordHashed(expectedPassword)
+
+		assert.Nil(t, err)
+		assert.NotNil(t, got)
+		assert.Equal(t, expectedPassword, got.String())
+	})
+}

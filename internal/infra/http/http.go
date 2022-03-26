@@ -58,8 +58,12 @@ type Http struct {
 }
 
 func wrapError(err error) string {
+	errorMessage := ""
+	if err != nil {
+		errorMessage = err.Error()
+	}
 	response := ErrorResponse{
-		Message: err.Error(),
+		Message: errorMessage,
 	}
 
 	bytes, err := json.Marshal(response)
@@ -72,8 +76,8 @@ func wrapError(err error) string {
 
 func wrapBody(body interface{}) string {
 	bytes, err := json.Marshal(body)
-	if err != nil {
-		return ""
+	if err != nil || string(bytes) == "null" {
+		return "{}"
 	}
 
 	return string(bytes)

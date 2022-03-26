@@ -48,8 +48,11 @@ func ticketUserResponseFromUserOutput(output *ticket.UserOutput) *TicketUserResp
 	}
 }
 
-func ticketResponseFromOutput(output *ticket.Output) *TicketResponse {
-	var updatedAt string
+func ticketResponseFromOutput(output ticket.Output) *TicketResponse {
+	var createdAt, updatedAt string
+	if output.CreatedAt != nil {
+		createdAt = output.CreatedAt.Format(DataFormat)
+	}
 	if output.UpdatedAt != nil {
 		updatedAt = output.UpdatedAt.Format(DataFormat)
 	}
@@ -61,15 +64,15 @@ func ticketResponseFromOutput(output *ticket.Output) *TicketResponse {
 		Status:      output.Status,
 		Client:      ticketUserResponseFromUserOutput(output.Client),
 		Operator:    ticketUserResponseFromUserOutput(output.Operator),
-		CreatedAt:   output.CreatedAt.Format(DataFormat),
+		CreatedAt:   createdAt,
 		UpdatedAt:   updatedAt,
 	}
 }
 
-func ticketsResponseFromOutputs(outputs *[]ticket.Output) *[]TicketResponse {
-	responses := make([]TicketResponse, 0, len(*outputs))
-	for _, output := range *outputs {
-		responses = append(responses, *ticketResponseFromOutput(&output))
+func ticketsResponseFromOutputs(outputs []ticket.Output) *[]TicketResponse {
+	responses := make([]TicketResponse, 0, len(outputs))
+	for _, output := range outputs {
+		responses = append(responses, *ticketResponseFromOutput(output))
 	}
 	return &responses
 }
@@ -120,7 +123,7 @@ func (c *TicketController) Open(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketResponseFromOutput(output)),
+		Body:     wrapBody(ticketResponseFromOutput(*output)),
 	}
 }
 
@@ -148,7 +151,7 @@ func (c *TicketController) Get(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketResponseFromOutput(output)),
+		Body:     wrapBody(ticketResponseFromOutput(*output)),
 	}
 }
 
@@ -182,7 +185,7 @@ func (c *TicketController) Close(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketResponseFromOutput(output)),
+		Body:     wrapBody(ticketResponseFromOutput(*output)),
 	}
 }
 
@@ -213,7 +216,7 @@ func (c *TicketController) AssignToOperator(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketResponseFromOutput(output)),
+		Body:     wrapBody(ticketResponseFromOutput(*output)),
 	}
 }
 
@@ -265,7 +268,7 @@ func (c *TicketController) GetByID(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketResponseFromOutput(output)),
+		Body:     wrapBody(ticketResponseFromOutput(*output)),
 	}
 }
 
@@ -289,7 +292,7 @@ func (c *TicketController) GetAll(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsResponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(*output)),
 	}
 }
 
@@ -314,7 +317,7 @@ func (c *TicketController) GetAllByClient(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsResponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(*output)),
 	}
 }
 
@@ -339,7 +342,7 @@ func (c *TicketController) GetAllByOperator(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsResponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(*output)),
 	}
 }
 
@@ -363,6 +366,6 @@ func (c *TicketController) GetAllOpen(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusOK,
-		Body:     wrapBody(ticketsResponseFromOutputs(output)),
+		Body:     wrapBody(ticketsResponseFromOutputs(*output)),
 	}
 }

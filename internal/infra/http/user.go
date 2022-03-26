@@ -31,8 +31,11 @@ type (
 	}
 )
 
-func userResponseFromUserOutput(user *user.Output) *UserResponse {
-	var updatedAt string
+func userResponseFromUserOutput(user user.Output) *UserResponse {
+	var createdAt, updatedAt string
+	if user.CreatedAt != nil {
+		createdAt = user.CreatedAt.Format(DataFormat)
+	}
 	if user.UpdatedAt != nil {
 		updatedAt = user.UpdatedAt.Format(DataFormat)
 	}
@@ -40,15 +43,15 @@ func userResponseFromUserOutput(user *user.Output) *UserResponse {
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
-		CreatedAt: user.CreatedAt.Format(DataFormat),
+		CreatedAt: createdAt,
 		UpdatedAt: updatedAt,
 	}
 }
 
-func usersResponseFromUsersOutput(outputs *[]user.Output) *[]UserResponse {
-	response := make([]UserResponse, 0, len(*outputs))
-	for _, output := range *outputs {
-		response = append(response, *userResponseFromUserOutput(&output))
+func usersResponseFromUsersOutput(outputs []user.Output) *[]UserResponse {
+	response := make([]UserResponse, 0, len(outputs))
+	for _, output := range outputs {
+		response = append(response, *userResponseFromUserOutput(output))
 	}
 	return &response
 }
@@ -173,6 +176,6 @@ func (c *UserController) GetAllOperators(request Request) Response {
 
 	return Response{
 		HttpCode: http.StatusCreated,
-		Body:     wrapBody(usersResponseFromUsersOutput(output)),
+		Body:     wrapBody(usersResponseFromUsersOutput(*output)),
 	}
 }
