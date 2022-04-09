@@ -8,24 +8,6 @@ import (
 	"testing"
 )
 
-type mockAuth struct {
-	mock.Mock
-}
-
-func (m *mockAuth) Generate(user security.User) (string, error) {
-	args := m.Called(user)
-	return args.String(0), args.Error(1)
-}
-
-func (m *mockAuth) Validate(token string) (*security.User, error) {
-	args := m.Called(token)
-	var result *security.User
-	if args.Get(0) != nil {
-		result = args.Get(0).(*security.User)
-	}
-	return result, args.Error(1)
-}
-
 func TestAuthMiddleware_Handle(t *testing.T) {
 	tokens := []string{"", "token"}
 	for _, token := range tokens {

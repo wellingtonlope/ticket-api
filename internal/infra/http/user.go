@@ -175,7 +175,7 @@ func (c *UserController) GetAllOperators(request Request) Response {
 	}
 
 	return Response{
-		HttpCode: http.StatusCreated,
+		HttpCode: http.StatusOK,
 		Body:     wrapBody(usersResponseFromUsersOutput(*output)),
 	}
 }
