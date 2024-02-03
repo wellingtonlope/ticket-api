@@ -54,27 +54,28 @@ jobs:
           github_token: ${{ github.token }}
           branch: ${{ github.head_ref }}
 
-  Deploy:
-    name: Deploy application
-    needs: [Test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.14
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "wellingtonlope-ticket-api"
-          heroku_email: "wellington.lopes.tw@gmail.com"
-          usedocker: true
-          docker_build_args: |
-            APP_ENV
-            APP_SECRET
-            TOKEN_DURATION_HOUR
-            MONGO_URI
-            MONGO_DATABASE
-        env:
-          APP_ENV: production
-          APP_SECRET: ${{secrets.API_SECRET}}
-          TOKEN_DURATION_HOUR: ${{secrets.TOKEN_DURATION_HOUR}}
-          MONGO_URI: ${{secrets.MONGO_URI}}
-          MONGO_DATABASE: ticket-api
+  # Deploy:
+  #   name: Deploy application
+  #   needs: [Test]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: akhileshns/heroku-deploy@v3.12.14
+  #       with:
+  #         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+  #         heroku_app_name: "wellingtonlope-ticket-api"
+  #         heroku_email: "wellington.lopes.tw@gmail.com"
+  #         usedocker: true
+  #         docker_build_args: |
+  #           APP_ENV
+  #           APP_SECRET
+  #           TOKEN_DURATION_HOUR
+  #           MONGO_URI
+  #           MONGO_DATABASE
+  #       env:
+  #         APP_ENV: production
+  #         APP_SECRET: ${{secrets.API_SECRET}}
+  #         TOKEN_DURATION_HOUR: ${{secrets.TOKEN_DURATION_HOUR}}
+  #         MONGO_URI: ${{secrets.MONGO_URI}}
+  #         MONGO_DATABASE: ticket-api
+
