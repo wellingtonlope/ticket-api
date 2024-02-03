@@ -7,37 +7,48 @@ import (
 )
 
 func TestNewEmail(t *testing.T) {
-	t.Run("should return a new email", func(t *testing.T) {
-		expectedEmail := "email@mail.com"
-		got, err := NewEmail(expectedEmail)
+	testCases := []struct {
+		name           string
+		input          string
+		expectedResult *Email
+		expectedError  error
+	}{
+		{
+			name:           "should return a new email",
+			input:          "email@mail.com",
+			expectedResult: &Email{email: "email@mail.com"},
+			expectedError:  nil,
+		},
+		{
+			name:           "should return an error when empty email",
+			input:          "",
+			expectedResult: nil,
+			expectedError:  ErrEmailIsInvalid,
+		},
+		{
+			name:           "should return an error when invalid email",
+			input:          "email",
+			expectedResult: nil,
+			expectedError:  ErrEmailIsInvalid,
+		},
+		{
+			name:           "should return a email when valid email .br",
+			input:          "email@mail.com.br",
+			expectedResult: &Email{email: "email@mail.com.br"},
+			expectedError:  nil,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result, err := NewEmail(tc.input)
+			assert.Equal(t, tc.expectedResult, result)
+			assert.Equal(t, tc.expectedError, err)
+		})
+	}
+}
 
-		assert.Nil(t, err)
-		assert.NotNil(t, got)
-		assert.Equal(t, expectedEmail, got.String())
-	})
-
-	t.Run("should return an error when empty email", func(t *testing.T) {
-		got, err := NewEmail("")
-
-		assert.Nil(t, got)
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrEmailIsInvalid, err)
-	})
-
-	t.Run("should return an error when invalid email", func(t *testing.T) {
-		got, err := NewEmail("email")
-
-		assert.Nil(t, got)
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrEmailIsInvalid, err)
-	})
-
-	t.Run("should return a email when valid email .br", func(t *testing.T) {
-		expectedEmail := "email@mail.com.br"
-		got, err := NewEmail(expectedEmail)
-
-		assert.Nil(t, err)
-		assert.NotNil(t, got)
-		assert.Equal(t, expectedEmail, got.String())
-	})
+func TestEmail_String(t *testing.T) {
+	expectedString := "email@mail.com"
+	got, _ := NewEmail(expectedString)
+	assert.Equal(t, expectedString, got.String())
 }
