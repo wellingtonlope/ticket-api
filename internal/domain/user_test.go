@@ -8,40 +8,81 @@ import (
 )
 
 func TestRegisterUser(t *testing.T) {
-	name, email, password, createdAt := "name", "email@mail.com", "password", time.Now()
-
-	t.Run("should register a user", func(t *testing.T) {
-		user, err := UserRegister(name, email, password, createdAt)
-
-		assert.Nil(t, err)
-		assert.Equal(t, name, user.Name)
-		assert.Equal(t, email, user.Email.String())
-		assert.True(t, user.Password.IsCorrectPassword(password))
-		assert.Equal(t, ProfileClient, user.Profile)
-		assert.Equal(t, createdAt, *user.CreatedAt)
-	})
-
-	t.Run("shouldn't register a user when empty name", func(t *testing.T) {
-		user, err := UserRegister("", email, password, createdAt)
-
-		assert.Nil(t, user)
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrNameIsInvalid, err)
-	})
-
-	t.Run("shouldn't register a user when invalid email", func(t *testing.T) {
-		user, err := UserRegister(name, "email", password, createdAt)
-
-		assert.Nil(t, user)
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrEmailIsInvalid, err)
-	})
-
-	t.Run("shouldn't register a user when invalid password", func(t *testing.T) {
-		user, err := UserRegister(name, email, "", createdAt)
-
-		assert.Nil(t, user)
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrPasswordIsInvalid, err)
-	})
+	exampleDate := time.Now()
+	type args struct {
+		name      string
+		email     string
+		password  string
+		createdAt time.Time
+	}
+	testCases := []struct {
+		name          string
+		args          args
+		assertResult  func(t *testing.T, got *User)
+		expectedError error
+	}{
+		{
+			name: "should register a user",
+			args: args{
+				name:      "name",
+				email:     "email@mail.com",
+				password:  "password",
+				createdAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *User) {
+				assert.Equal(t, "name", got.Name)
+				assert.Equal(t, "email@mail.com", got.Email.String())
+				assert.True(t, got.Password.IsCorrectPassword("password"))
+				assert.Equal(t, ProfileClient, got.Profile)
+				assert.Equal(t, exampleDate, *got.CreatedAt)
+			},
+			expectedError: nil,
+		},
+		{
+			name: "shouldn't register a user when empty name",
+			args: args{
+				name:      "",
+				email:     "email@mail.com",
+				password:  "password",
+				createdAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *User) {
+				assert.Nil(t, got)
+			},
+			expectedError: ErrNameIsInvalid,
+		},
+		{
+			name: "shouldn't register a user when invalid email",
+			args: args{
+				name:      "name",
+				email:     "email",
+				password:  "password",
+				createdAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *User) {
+				assert.Nil(t, got)
+			},
+			expectedError: ErrEmailIsInvalid,
+		},
+		{
+			name: "shouldn't register a user when invalid password",
+			args: args{
+				name:      "name",
+				email:     "email@mail.com",
+				password:  "",
+				createdAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *User) {
+				assert.Nil(t, got)
+			},
+			expectedError: ErrPasswordIsInvalid,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := UserRegister(tc.args.name, tc.args.email, tc.args.password, tc.args.createdAt)
+			tc.assertResult(t, got)
+			assert.Equal(t, tc.expectedError, err)
+		})
+	}
 }
