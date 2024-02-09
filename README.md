@@ -2,8 +2,8 @@
 This project aims to learn and put DDD and Clean Architecture into practice. 
 With this in mind, I built a simple project where a user with a question puts his problem and an operator can visualize it and propose a solution.
 
-Demo: https://wellingtonlope-ticket-api.herokuapp.com \
-Documentation: https://wellingtonlope-ticket-api.herokuapp.com/swagger/index.html
+Demo: https://TBD \
+Documentation: https://TBD/swagger/index.html
 
 ![Build](https://github.com/wellingtonlope/ticket-api/actions/workflows/build.yaml/badge.svg)
 ![Coverage](https://img.shields.io/badge/Coverage-44.4%25-yellow)
