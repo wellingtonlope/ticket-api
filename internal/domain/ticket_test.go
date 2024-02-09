@@ -8,82 +8,174 @@ import (
 )
 
 func TestOpenTicket(t *testing.T) {
-	title, description, createdAt := "title", "description", time.Now()
-	client, _ := UserRegister("client", "client@mail.com", "password", createdAt)
-
-	t.Run("should open a valid ticket", func(t *testing.T) {
-		ticket, err := OpenTicket(title, description, createdAt, *client)
-
-		assert.Nil(t, err)
-		assert.NotNil(t, ticket)
-		assert.Equal(t, title, ticket.Title)
-		assert.Equal(t, description, ticket.Description)
-		assert.Equal(t, StatusOpen, ticket.Status)
-		assert.Equal(t, client.ID, ticket.Client.ID)
-		assert.Equal(t, client.Name, ticket.Client.Name)
-		assert.Equal(t, client.Email, ticket.Client.Email)
-		assert.Equal(t, createdAt, *ticket.CreatedAt)
-		assert.Nil(t, ticket.UpdatedAt)
-	})
-
-	t.Run("should return an error if title is empty", func(t *testing.T) {
-		ticket, err := OpenTicket("", description, createdAt, *client)
-
-		assert.Nil(t, ticket)
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrTicketTitleIsInvalid, err)
-	})
+	exampleDate := time.Now()
+	exampleClient, _ := UserRegister("client", "client@mail.com", "password", exampleDate)
+	type args struct {
+		title       string
+		description string
+		createdAt   time.Time
+		client      *User
+	}
+	testCases := []struct {
+		name          string
+		args          args
+		assertResult  func(t *testing.T, got *Ticket)
+		expectedError error
+	}{
+		{
+			name: "should open a valid ticket",
+			args: args{
+				title:       "title",
+				description: "description",
+				createdAt:   exampleDate,
+				client:      exampleClient,
+			},
+			assertResult: func(t *testing.T, got *Ticket) {
+				assert.NotNil(t, got)
+				assert.Equal(t, "title", got.Title)
+				assert.Equal(t, "description", got.Description)
+				assert.Equal(t, StatusOpen, got.Status)
+				assert.Equal(t, exampleClient.ID, got.Client.ID)
+				assert.Equal(t, exampleClient.Name, got.Client.Name)
+				assert.Equal(t, exampleClient.Email, got.Client.Email)
+				assert.Equal(t, exampleDate, *got.CreatedAt)
+				assert.Nil(t, got.UpdatedAt)
+			},
+			expectedError: nil,
+		},
+		{
+			name: "should return an error if title is empty",
+			args: args{
+				title:       "",
+				description: "description",
+				createdAt:   exampleDate,
+				client:      exampleClient,
+			},
+			assertResult: func(t *testing.T, got *Ticket) {
+				assert.Nil(t, got)
+			},
+			expectedError: ErrTicketTitleIsInvalid,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := OpenTicket(tc.args.title, tc.args.description, tc.args.createdAt, *tc.args.client)
+			tc.assertResult(t, got)
+			assert.Equal(t, tc.expectedError, err)
+		})
+	}
 }
 
 func TestTicketGet(t *testing.T) {
-	title, description, createdAt, updatedAt := "title", "description", time.Now(), time.Now().Add(time.Hour*48)
-	client, _ := UserRegister("client", "client@mail.com", "password", createdAt)
-	operator, _ := UserRegister("operator", "operator@mail.com", "password", createdAt)
-	operator.Profile = ProfileOperator
-
-	t.Run("should get a valid ticket", func(t *testing.T) {
-		ticket, _ := OpenTicket(title, description, createdAt, *client)
-		_ = ticket.Get(*operator, updatedAt)
-
-		assert.Equal(t, operator.ID, ticket.Operator.ID)
-		assert.Equal(t, operator.Name, ticket.Operator.Name)
-		assert.Equal(t, operator.Email, ticket.Operator.Email)
-		assert.Equal(t, StatusInProgress, ticket.Status)
-		assert.Equal(t, updatedAt, *ticket.UpdatedAt)
-	})
-
-	t.Run("should return an error if operator is not an operator", func(t *testing.T) {
-		ticket, _ := OpenTicket(title, description, createdAt, *client)
-		err := ticket.Get(*client, createdAt)
-
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrTicketNoOperator, err)
-	})
+	exampleDate := time.Now()
+	exampleClient, _ := UserRegister("client", "client@mail.com", "password", exampleDate)
+	exampleOperator, _ := UserRegister("operator", "operator@mail.com", "password", exampleDate)
+	exampleOperator.Profile = ProfileOperator
+	exampleTicketOpen, _ := OpenTicket("title", "description", exampleDate, *exampleClient)
+	type args struct {
+		operator  *User
+		updatedAt time.Time
+	}
+	testCases := []struct {
+		name          string
+		ticket        Ticket
+		args          args
+		assertResult  func(t *testing.T, got *Ticket)
+		expectedError error
+	}{
+		{
+			name:   "should get a valid ticket",
+			ticket: *exampleTicketOpen,
+			args: args{
+				operator:  exampleOperator,
+				updatedAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *Ticket) {
+				assert.Equal(t, exampleOperator.ID, got.Operator.ID)
+				assert.Equal(t, exampleOperator.Name, got.Operator.Name)
+				assert.Equal(t, exampleOperator.Email, got.Operator.Email)
+				assert.Equal(t, StatusInProgress, got.Status)
+				assert.Equal(t, exampleDate, *got.UpdatedAt)
+			},
+			expectedError: nil,
+		},
+		{
+			name:   "should return an error if operator is not an operator",
+			ticket: *exampleTicketOpen,
+			args: args{
+				operator:  exampleClient,
+				updatedAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *Ticket) {
+				assert.Equal(t, *exampleTicketOpen, *got)
+			},
+			expectedError: ErrTicketNoOperator,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.ticket.Get(*tc.args.operator, tc.args.updatedAt)
+			tc.assertResult(t, &tc.ticket)
+			assert.Equal(t, tc.expectedError, err)
+		})
+	}
 }
 
 func TestTicketClose(t *testing.T) {
-	title, description, createdAt, updatedAt := "title", "description", time.Now(), time.Now().Add(time.Hour*48)
-	client, _ := UserRegister("client", "client@mail.com", "password", createdAt)
-	operator, _ := UserRegister("operator", "operator@mail.com", "password", createdAt)
-	operator.Profile = ProfileOperator
-
-	t.Run("should close a valid ticket", func(t *testing.T) {
-		expectedSolution := "solution"
-		ticket, _ := OpenTicket(title, description, createdAt, *client)
-		_ = ticket.Get(*operator, createdAt)
-		err := ticket.Close(expectedSolution, updatedAt)
-
-		assert.Nil(t, err)
-		assert.Equal(t, StatusClose, ticket.Status)
-		assert.Equal(t, updatedAt, *ticket.UpdatedAt)
-		assert.Equal(t, expectedSolution, ticket.Solution)
-	})
-
-	t.Run("should return an error if no operator", func(t *testing.T) {
-		ticket, _ := OpenTicket(title, description, createdAt, *client)
-		err := ticket.Close("solution", createdAt)
-
-		assert.NotNil(t, err)
-		assert.Equal(t, ErrTicketNoGetToClose, err)
-	})
+	exampleDate := time.Now()
+	exampleSolution := "solution"
+	exampleClient, _ := UserRegister("client", "client@mail.com", "password", exampleDate)
+	exampleOperator, _ := UserRegister("operator", "operator@mail.com", "password", exampleDate)
+	exampleOperator.Profile = ProfileOperator
+	exampleTicketOpen, _ := OpenTicket("title", "description", exampleDate, *exampleClient)
+	exampleTicketGet := func() *Ticket {
+		m := *exampleTicketOpen
+		_ = m.Get(*exampleOperator, exampleDate)
+		return &m
+	}()
+	type args struct {
+		solution  string
+		updatedAt time.Time
+	}
+	testCases := []struct {
+		name          string
+		ticket        Ticket
+		args          args
+		assertResult  func(t *testing.T, got *Ticket)
+		expectedError error
+	}{
+		{
+			name:   "should close a valid ticket",
+			ticket: *exampleTicketGet,
+			args: args{
+				solution:  exampleSolution,
+				updatedAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *Ticket) {
+				assert.Equal(t, StatusClose, got.Status)
+				assert.Equal(t, exampleDate, *got.UpdatedAt)
+				assert.Equal(t, exampleSolution, got.Solution)
+			},
+			expectedError: nil,
+		},
+		{
+			name:   "should return an error if no operator",
+			ticket: *exampleTicketOpen,
+			args: args{
+				solution:  exampleSolution,
+				updatedAt: exampleDate,
+			},
+			assertResult: func(t *testing.T, got *Ticket) {
+				assert.Equal(t, *exampleTicketOpen, *got)
+			},
+			expectedError: ErrTicketNoGetToClose,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.ticket.Close(tc.args.solution, tc.args.updatedAt)
+			tc.assertResult(t, &tc.ticket)
+			assert.Equal(t, tc.expectedError, err)
+		})
+	}
 }
