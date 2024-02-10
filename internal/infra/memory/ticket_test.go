@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -10,38 +11,61 @@ import (
 )
 
 func TestTicketRepository_GetByID(t *testing.T) {
-	userClientFixture, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
-	ticketFixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
-
-	t.Run("should get a ticket by id", func(t *testing.T) {
-		repo := &TicketRepository{}
-		ticket, _ := repo.Insert(*ticketFixture)
-
-		got, err := repo.GetByID(ticket.ID)
-
-		assert.Nil(t, err)
-		assert.NotNil(t, got)
-		assert.Equal(t, ticket.ID, got.ID)
-		assert.Equal(t, ticket.Title, got.Title)
-		assert.Equal(t, ticket.Description, got.Description)
-		assert.Equal(t, ticket.Status, got.Status)
-		assert.Equal(t, ticket.CreatedAt, got.CreatedAt)
-		assert.Equal(t, ticket.UpdatedAt, got.UpdatedAt)
-		assert.Equal(t, ticket.Client.ID, got.Client.ID)
-		assert.Equal(t, ticket.Client.Name, got.Client.Name)
-		assert.Equal(t, ticket.Client.Email.String(), got.Client.Email.String())
-	})
-
-	t.Run("should return error when ticket not found", func(t *testing.T) {
-		repo := &TicketRepository{}
-
-		got, err := repo.GetByID("ID_NOT_FOUND")
-
-		assert.NotNil(t, err)
-		assert.Nil(t, got)
-		assert.Equal(t, repository.ErrTicketNotFound, err)
-	})
+	exampleDate := time.Now()
+	exampleClient, _ := domain.UserRegister("client", "client@mail.com", "password", exampleDate)
+	exampleTicket, _ := domain.OpenTicket("title", "description", exampleDate, *exampleClient)
+	exampleRepository := func() *TicketRepository {
+		m := &TicketRepository{}
+		exampleTicket, _ = m.Insert(*exampleTicket)
+		return m
+	}()
+	fmt.Println(exampleTicket)
+	testCases := []struct {
+		name          string
+		repo          *TicketRepository
+		id            string
+		assertResult  func(*testing.T, *domain.Ticket)
+		expectedError error
+	}{
+		{
+			name: "should get a ticket by id",
+			repo: exampleRepository,
+			id:   exampleTicket.ID,
+			assertResult: func(t *testing.T, got *domain.Ticket) {
+				assert.NotNil(t, got)
+				assert.Equal(t, exampleTicket.ID, got.ID)
+				assert.Equal(t, exampleTicket.Title, got.Title)
+				assert.Equal(t, exampleTicket.Description, got.Description)
+				assert.Equal(t, exampleTicket.Status, got.Status)
+				assert.Equal(t, exampleTicket.CreatedAt, got.CreatedAt)
+				assert.Equal(t, exampleTicket.UpdatedAt, got.UpdatedAt)
+				assert.Equal(t, exampleTicket.Client.ID, got.Client.ID)
+				assert.Equal(t, exampleTicket.Client.Name, got.Client.Name)
+				assert.Equal(t, exampleTicket.Client.Email.String(), got.Client.Email.String())
+			},
+			expectedError: nil,
+		},
+		{
+			name: "should return error when ticket not found",
+			repo: exampleRepository,
+			id:   "ID_NOT_FOUND",
+			assertResult: func(t *testing.T, got *domain.Ticket) {
+				assert.Nil(t, got)
+			},
+			expectedError: repository.ErrTicketNotFound,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := tc.repo.GetByID(tc.id)
+			fmt.Println(got)
+			fmt.Println(err)
+			tc.assertResult(t, got)
+			assert.Equal(t, tc.expectedError, err)
+		})
+	}
 }
+
 func TestTicketRepository_Insert(t *testing.T) {
 	userClientFixture, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 	ticketFixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
