@@ -106,15 +106,15 @@ func TestTicketGet(t *testing.T) {
 				updatedAt: exampleDate,
 			},
 			assertResult: func(t *testing.T, got Ticket) {
-				assert.Equal(t, exampleTicketOpen, got)
+				assert.Equal(t, Ticket{}, got)
 			},
 			expectedError: ErrTicketNoOperator,
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := tc.ticket.Get(*tc.args.operator, tc.args.updatedAt)
-			tc.assertResult(t, tc.ticket)
+			got, err := tc.ticket.Get(*tc.args.operator, tc.args.updatedAt)
+			tc.assertResult(t, got)
 			assert.Equal(t, tc.expectedError, err)
 		})
 	}
@@ -128,8 +128,7 @@ func TestTicketClose(t *testing.T) {
 	exampleOperator.Profile = ProfileOperator
 	exampleTicketOpen, _ := OpenTicket("title", "description", exampleDate, *exampleClient)
 	exampleTicketGet := func() Ticket {
-		m := exampleTicketOpen
-		_ = m.Get(*exampleOperator, exampleDate)
+		m, _ := exampleTicketOpen.Get(*exampleOperator, exampleDate)
 		return m
 	}()
 	type args struct {
@@ -165,15 +164,15 @@ func TestTicketClose(t *testing.T) {
 				updatedAt: exampleDate,
 			},
 			assertResult: func(t *testing.T, got Ticket) {
-				assert.Equal(t, exampleTicketOpen, got)
+				assert.Equal(t, Ticket{}, got)
 			},
 			expectedError: ErrTicketNoGetToClose,
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := tc.ticket.Close(tc.args.solution, tc.args.updatedAt)
-			tc.assertResult(t, tc.ticket)
+			got, err := tc.ticket.Close(tc.args.solution, tc.args.updatedAt)
+			tc.assertResult(t, got)
 			assert.Equal(t, tc.expectedError, err)
 		})
 	}

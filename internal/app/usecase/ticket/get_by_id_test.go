@@ -24,8 +24,8 @@ func TestGetByID(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		_ = ticket.Get(*operator, time.Now())
-		insertedTicket, _ := repo.Insert(ticket)
+		updatedTicket, _ := ticket.Get(*operator, time.Now())
+		insertedTicket, _ := repo.Insert(updatedTicket)
 
 		input := GetByIDInput{
 			TicketID:   insertedTicket.ID,

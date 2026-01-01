@@ -43,12 +43,12 @@ func (u *assignToOperator) Handle(input AssignToOperatorInput) (*Output, error) 
 		return nil, err
 	}
 
-	err = ticket.Get(*user, input.UpdatedAt)
+	updatedTicket, err := ticket.Get(*user, input.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
 
-	ticket, err = u.ticketRepository.Update(*ticket)
+	ticket, err = u.ticketRepository.Update(updatedTicket)
 	if err != nil {
 		return nil, err
 	}

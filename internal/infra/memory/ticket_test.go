@@ -107,13 +107,13 @@ func TestTicketRepository_Update(t *testing.T) {
 		ticket, _ := repo.Insert(ticketFixture)
 
 		expectedUpdatedAt := time.Now()
-		_ = ticket.Get(*operatorClientFixture, expectedUpdatedAt)
+		updatedTicket, _ := ticket.Get(*operatorClientFixture, expectedUpdatedAt)
 
-		got, err := repo.Update(*ticket)
+		got, err := repo.Update(updatedTicket)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, got)
-		assert.Equal(t, ticket, got)
+		assert.Equal(t, updatedTicket, *got)
 
 		gotRepo, err := repo.GetByID(got.ID)
 
@@ -156,12 +156,12 @@ func TestTicketRepository_GetAllOpen(t *testing.T) {
 	operatorFixture.Profile = domain.ProfileOperator
 	ticketOpenFixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
 	ticketGetFixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
-	_ = ticketGetFixture.Get(*operatorFixture, time.Now())
+	ticketGetFixtureUpdated, _ := ticketGetFixture.Get(*operatorFixture, time.Now())
 
 	t.Run("should get all open tickets", func(t *testing.T) {
 		repo := &TicketRepository{}
 		_, _ = repo.Insert(ticketOpenFixture)
-		_, _ = repo.Insert(ticketGetFixture)
+		_, _ = repo.Insert(ticketGetFixtureUpdated)
 
 		got, err := repo.GetAllOpen()
 
@@ -180,15 +180,15 @@ func TestTicketRepository_GetAllByOperatorID(t *testing.T) {
 	operator2Fixture.ID = "operator2"
 	operator2Fixture.Profile = domain.ProfileOperator
 	ticket1Fixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
-	_ = ticket1Fixture.Get(*operator1Fixture, time.Now())
+	ticket1Updated, _ := ticket1Fixture.Get(*operator1Fixture, time.Now())
 	ticket2Fixture, _ := domain.OpenTicket("title", "description", time.Now(), *userClientFixture)
-	_ = ticket2Fixture.Get(*operator2Fixture, time.Now())
+	ticket2Updated, _ := ticket2Fixture.Get(*operator2Fixture, time.Now())
 
 	t.Run("should get all open tickets", func(t *testing.T) {
 		repo := &TicketRepository{}
 
-		_, _ = repo.Insert(ticket1Fixture)
-		_, _ = repo.Insert(ticket2Fixture)
+		_, _ = repo.Insert(ticket1Updated)
+		_, _ = repo.Insert(ticket2Updated)
 
 		got, err := repo.GetAllByOperatorID(operator1Fixture.ID)
 

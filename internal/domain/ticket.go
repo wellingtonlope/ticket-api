@@ -56,9 +56,9 @@ func OpenTicket(title, description string, createdAt time.Time, client User) (Ti
 	}, nil
 }
 
-func (t *Ticket) Get(operator User, updatedAt time.Time) error {
+func (t Ticket) Get(operator User, updatedAt time.Time) (Ticket, error) {
 	if operator.Profile != ProfileOperator {
-		return ErrTicketNoOperator
+		return Ticket{}, ErrTicketNoOperator
 	}
 
 	t.Operator = &TicketUser{
@@ -69,17 +69,17 @@ func (t *Ticket) Get(operator User, updatedAt time.Time) error {
 	t.UpdatedAt = updatedAt
 	t.Status = StatusInProgress
 
-	return nil
+	return t, nil
 }
 
-func (t *Ticket) Close(solution string, updatedAt time.Time) error {
+func (t Ticket) Close(solution string, updatedAt time.Time) (Ticket, error) {
 	if t.Operator == nil {
-		return ErrTicketNoGetToClose
+		return Ticket{}, ErrTicketNoGetToClose
 	}
 
 	t.Solution = solution
 	t.UpdatedAt = updatedAt
 	t.Status = StatusClose
 
-	return nil
+	return t, nil
 }

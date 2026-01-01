@@ -21,8 +21,8 @@ func TestGetAllOpen(t *testing.T) {
 		operator, _ = repoUser.Insert(*operator)
 		ticketInProgress, _ := domain.OpenTicket("title1", "description1", time.Now(), *operator)
 		insertedTicket, _ := repo.Insert(ticketInProgress)
-		_ = insertedTicket.Get(*operator, time.Now())
-		_, _ = repo.Update(*insertedTicket)
+		updatedTicket, _ := insertedTicket.Get(*operator, time.Now())
+		_, _ = repo.Update(updatedTicket)
 		ticketOpen, _ := domain.OpenTicket("title2", "description2", time.Now(), *operator)
 		_, _ = repo.Insert(ticketOpen)
 
@@ -46,8 +46,8 @@ func TestGetAllOpen(t *testing.T) {
 		client, _ = repoUser.Insert(*client)
 		ticketInProgress, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		insertedTicket, _ := repo.Insert(ticketInProgress)
-		_ = insertedTicket.Get(*operator, time.Now())
-		_, _ = repo.Update(*insertedTicket)
+		updatedTicket, _ := insertedTicket.Get(*operator, time.Now())
+		_, _ = repo.Update(updatedTicket)
 		ticketOpen, _ := domain.OpenTicket("title2", "description2", time.Now(), *client)
 		_, _ = repo.Insert(ticketOpen)
 

@@ -21,8 +21,8 @@ func TestClose(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		_ = ticket.Get(*operator, time.Now())
-		insertedTicket, _ := repo.Insert(ticket)
+		updatedTicket, _ := ticket.Get(*operator, time.Now())
+		insertedTicket, _ := repo.Insert(updatedTicket)
 
 		input := CloseInput{TicketID: insertedTicket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
@@ -51,8 +51,8 @@ func TestClose(t *testing.T) {
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		_ = ticket.Get(*operator, time.Now())
-		insertedTicket, _ := repo.Insert(ticket)
+		updatedTicket, _ := ticket.Get(*operator, time.Now())
+		insertedTicket, _ := repo.Insert(updatedTicket)
 
 		input := CloseInput{TicketID: insertedTicket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
@@ -71,8 +71,8 @@ func TestClose(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		_ = ticket.Get(*operator, time.Now())
-		_, _ = repo.Insert(ticket)
+		updatedTicket, _ := ticket.Get(*operator, time.Now())
+		_, _ = repo.Insert(updatedTicket)
 
 		input := CloseInput{TicketID: "invalid-id", Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)

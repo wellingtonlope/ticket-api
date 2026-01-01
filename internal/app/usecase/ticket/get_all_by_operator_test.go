@@ -22,11 +22,11 @@ func TestGetAllByOperator(t *testing.T) {
 		operatorOther, _ := domain.UserRegister("operatorOther", "operatorOther@mail.com", "password", time.Now())
 		operatorOther, _ = repoUser.Insert(*operatorOther)
 		ticketOther, _ := domain.OpenTicket("title", "description", time.Now(), *operatorOther)
-		_ = ticketOther.Get(*operatorOther, time.Now())
-		_, _ = repo.Insert(ticketOther)
+		updatedTicketOther, _ := ticketOther.Get(*operatorOther, time.Now())
+		_, _ = repo.Insert(updatedTicketOther)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		_ = ticket.Get(*operator, time.Now())
-		_, _ = repo.Insert(ticket)
+		updatedTicket, _ := ticket.Get(*operator, time.Now())
+		_, _ = repo.Insert(updatedTicket)
 
 		input := GetAllByOperatorInput{OperatorID: operator.ID, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
@@ -47,8 +47,8 @@ func TestGetAllByOperator(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		_ = ticket.Get(*operator, time.Now())
-		_, _ = repo.Insert(ticket)
+		updatedTicket, _ := ticket.Get(*operator, time.Now())
+		_, _ = repo.Insert(updatedTicket)
 
 		input := GetAllByOperatorInput{OperatorID: operator.ID, LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)

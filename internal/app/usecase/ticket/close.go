@@ -37,12 +37,12 @@ func (u *close) Handle(input CloseInput) (*Output, error) {
 		return nil, err
 	}
 
-	err = ticket.Close(input.Solution, input.UpdatedAt)
+	updatedTicket, err := ticket.Close(input.Solution, input.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
 
-	ticket, err = u.ticketRepository.Update(*ticket)
+	ticket, err = u.ticketRepository.Update(updatedTicket)
 	if err != nil {
 		return nil, err
 	}
