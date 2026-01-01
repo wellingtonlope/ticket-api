@@ -29,10 +29,10 @@ func TestTicketResponseFromOutput(t *testing.T) {
 			Description: "description",
 			Solution:    "solution",
 			Status:      "OPEN",
-			Client:      &ticket.UserOutput{ID: "id", Name: "name", Email: "mail@mail.com"},
+			Client:      ticket.UserOutput{ID: "id", Name: "name", Email: "mail@mail.com"},
 			Operator:    &ticket.UserOutput{ID: "id", Name: "name", Email: "mail@mail.com"},
-			CreatedAt:   &date,
-			UpdatedAt:   &date,
+			CreatedAt:   date,
+			UpdatedAt:   date,
 		}
 
 		got := ticketResponseFromOutput(output)
@@ -60,7 +60,7 @@ func TestTicketResponseFromOutput(t *testing.T) {
 		assert.Equal(t, "", got.Description)
 		assert.Equal(t, "", got.Solution)
 		assert.Equal(t, "", got.Status)
-		assert.Nil(t, got.Client)
+		assert.Equal(t, "", got.Client.ID)
 		assert.Nil(t, got.Operator)
 		assert.Equal(t, "", got.CreatedAt)
 		assert.Equal(t, "", got.UpdatedAt)

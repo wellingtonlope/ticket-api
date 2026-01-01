@@ -21,15 +21,15 @@ type TicketUser struct {
 }
 
 type Ticket struct {
-	ID          primitive.ObjectID  `bson:"_id"`
-	Title       string              `bson:"title"`
-	Description string              `bson:"description,omitempty"`
-	Solution    string              `bson:"solution,omitempty"`
-	Status      string              `bson:"status"`
-	Client      *TicketUser         `bson:"client"`
-	Operator    *TicketUser         `bson:"operator,omitempty"`
-	CreatedAt   *primitive.DateTime `bson:"created_at"`
-	UpdatedAt   *primitive.DateTime `bson:"updated_at,omitempty"`
+	ID          primitive.ObjectID `bson:"_id"`
+	Title       string             `bson:"title"`
+	Description string             `bson:"description,omitempty"`
+	Solution    string             `bson:"solution,omitempty"`
+	Status      string             `bson:"status"`
+	Client      TicketUser         `bson:"client"`
+	Operator    *TicketUser        `bson:"operator,omitempty"`
+	CreatedAt   primitive.DateTime `bson:"created_at"`
+	UpdatedAt   primitive.DateTime `bson:"updated_at,omitempty"`
 }
 
 func domainToTicket(ticketDomain domain.Ticket) *Ticket {
@@ -44,13 +44,13 @@ func domainToTicket(ticketDomain domain.Ticket) *Ticket {
 		Description: ticketDomain.Description,
 		Solution:    ticketDomain.Solution,
 		Status:      string(ticketDomain.Status),
-	}
-	if ticketDomain.Client != nil {
-		ticket.Client = &TicketUser{
+		Client: TicketUser{
 			ID:    ticketDomain.Client.ID,
 			Name:  ticketDomain.Client.Name,
 			Email: ticketDomain.Client.Email.String(),
-		}
+		},
+		CreatedAt: primitive.NewDateTimeFromTime(ticketDomain.CreatedAt),
+		UpdatedAt: primitive.NewDateTimeFromTime(ticketDomain.UpdatedAt),
 	}
 	if ticketDomain.Operator != nil {
 		ticket.Operator = &TicketUser{
@@ -59,48 +59,32 @@ func domainToTicket(ticketDomain domain.Ticket) *Ticket {
 			Email: ticketDomain.Operator.Email.String(),
 		}
 	}
-	if ticketDomain.CreatedAt != nil {
-		createdAt := primitive.NewDateTimeFromTime(*ticketDomain.CreatedAt)
-		ticket.CreatedAt = &createdAt
-	}
-	if ticketDomain.UpdatedAt != nil {
-		updatedAt := primitive.NewDateTimeFromTime(*ticketDomain.UpdatedAt)
-		ticket.UpdatedAt = &updatedAt
-	}
 	return &ticket
 }
 
 func (t Ticket) toDomain() *domain.Ticket {
+	email, _ := domain.NewEmail(t.Client.Email)
 	ticketDomain := domain.Ticket{
 		ID:          t.ID.Hex(),
 		Title:       t.Title,
 		Description: t.Description,
 		Solution:    t.Solution,
 		Status:      domain.Status(t.Status),
-	}
-	if t.Client != nil {
-		email, _ := domain.NewEmail(t.Client.Email)
-		ticketDomain.Client = &domain.TicketUser{
+		Client: domain.TicketUser{
 			ID:    t.Client.ID,
 			Name:  t.Client.Name,
 			Email: *email,
-		}
+		},
+		CreatedAt: t.CreatedAt.Time(),
+		UpdatedAt: t.UpdatedAt.Time(),
 	}
 	if t.Operator != nil {
-		email, _ := domain.NewEmail(t.Client.Email)
+		operatorEmail, _ := domain.NewEmail(t.Operator.Email)
 		ticketDomain.Operator = &domain.TicketUser{
 			ID:    t.Operator.ID,
 			Name:  t.Operator.Name,
-			Email: *email,
+			Email: *operatorEmail,
 		}
-	}
-	if t.CreatedAt != nil {
-		createdAt := t.CreatedAt.Time()
-		ticketDomain.CreatedAt = &createdAt
-	}
-	if t.UpdatedAt != nil {
-		updatedAt := t.UpdatedAt.Time()
-		ticketDomain.UpdatedAt = &updatedAt
 	}
 	return &ticketDomain
 }

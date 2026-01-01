@@ -18,10 +18,10 @@ type Output struct {
 	Description string
 	Solution    string
 	Status      string
-	Client      *UserOutput
+	Client      UserOutput
 	Operator    *UserOutput
-	CreatedAt   *time.Time
-	UpdatedAt   *time.Time
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func ticketOutputFromTicket(ticket *domain.Ticket) *Output {
@@ -42,7 +42,7 @@ func ticketOutputFromTicket(ticket *domain.Ticket) *Output {
 		Status:      string(ticket.Status),
 		CreatedAt:   ticket.CreatedAt,
 		UpdatedAt:   ticket.UpdatedAt,
-		Client: &UserOutput{
+		Client: UserOutput{
 			ID:    ticket.Client.ID,
 			Name:  ticket.Client.Name,
 			Email: ticket.Client.Email.String(),

@@ -31,12 +31,12 @@ func TestClose(t *testing.T) {
 		assert.NotNil(t, output)
 		assert.Equal(t, ticket.ID, output.ID)
 		assert.Equal(t, string(domain.StatusClose), output.Status)
-		assert.Equal(t, input.UpdatedAt, *output.UpdatedAt)
+		assert.Equal(t, input.UpdatedAt, output.UpdatedAt)
 		assert.Equal(t, input.Solution, output.Solution)
 
 		ticketRepo, _ := repo.GetByID(ticket.ID)
 		assert.Equal(t, domain.StatusClose, ticketRepo.Status)
-		assert.Equal(t, input.UpdatedAt, *ticketRepo.UpdatedAt)
+		assert.Equal(t, input.UpdatedAt, ticketRepo.UpdatedAt)
 		assert.Equal(t, input.Solution, output.Solution)
 	})
 

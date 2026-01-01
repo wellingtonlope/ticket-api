@@ -34,7 +34,7 @@ func TestOpen(t *testing.T) {
 		assert.NotEmpty(t, output.ID)
 		assert.Equal(t, input.Title, output.Title)
 		assert.Equal(t, input.Description, output.Description)
-		assert.Equal(t, input.CreatedAt, *output.CreatedAt)
+		assert.Equal(t, input.CreatedAt, output.CreatedAt)
 		assert.Equal(t, string(domain.StatusOpen), output.Status)
 		assert.Equal(t, input.LoggedUser.ID, output.Client.ID)
 		assert.Equal(t, input.LoggedUser.Name, output.Client.Name)

@@ -23,10 +23,10 @@ type (
 		Description string              `json:"description"`
 		Solution    string              `json:"solution,omitempty"`
 		Status      string              `json:"status"`
-		Client      *TicketUserResponse `json:"client"`
+		Client      TicketUserResponse  `json:"client"`
 		Operator    *TicketUserResponse `json:"operator,omitempty"`
 		CreatedAt   string              `json:"created_at"`
-		UpdatedAt   string              `json:"updated_at,omitempty"`
+		UpdatedAt   string              `json:"updated_at"`
 	}
 	OpenRequest struct {
 		Title       string `json:"title"`
@@ -51,10 +51,10 @@ func ticketUserResponseFromUserOutput(output *ticket.UserOutput) *TicketUserResp
 
 func ticketResponseFromOutput(output ticket.Output) *TicketResponse {
 	var createdAt, updatedAt string
-	if output.CreatedAt != nil {
+	if !output.CreatedAt.IsZero() {
 		createdAt = output.CreatedAt.Format(DataFormat)
 	}
-	if output.UpdatedAt != nil {
+	if !output.UpdatedAt.IsZero() {
 		updatedAt = output.UpdatedAt.Format(DataFormat)
 	}
 	return &TicketResponse{
@@ -63,7 +63,7 @@ func ticketResponseFromOutput(output ticket.Output) *TicketResponse {
 		Description: output.Description,
 		Solution:    output.Solution,
 		Status:      output.Status,
-		Client:      ticketUserResponseFromUserOutput(output.Client),
+		Client:      *ticketUserResponseFromUserOutput(&output.Client),
 		Operator:    ticketUserResponseFromUserOutput(output.Operator),
 		CreatedAt:   createdAt,
 		UpdatedAt:   updatedAt,

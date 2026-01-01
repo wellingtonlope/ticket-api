@@ -31,10 +31,10 @@ type Ticket struct {
 	Description string
 	Solution    string
 	Status      Status
-	Client      *TicketUser
+	Client      TicketUser
 	Operator    *TicketUser
-	CreatedAt   *time.Time
-	UpdatedAt   *time.Time
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func OpenTicket(title, description string, createdAt time.Time, client User) (*Ticket, error) {
@@ -46,12 +46,13 @@ func OpenTicket(title, description string, createdAt time.Time, client User) (*T
 		Title:       title,
 		Description: description,
 		Status:      StatusOpen,
-		Client: &TicketUser{
+		Client: TicketUser{
 			ID:    client.ID,
 			Name:  client.Name,
 			Email: client.Email,
 		},
-		CreatedAt: &createdAt,
+		CreatedAt: createdAt,
+		UpdatedAt: createdAt,
 	}, nil
 }
 
@@ -65,7 +66,7 @@ func (t *Ticket) Get(operator User, updatedAt time.Time) error {
 		Name:  operator.Name,
 		Email: operator.Email,
 	}
-	t.UpdatedAt = &updatedAt
+	t.UpdatedAt = updatedAt
 	t.Status = StatusInProgress
 
 	return nil
@@ -77,7 +78,7 @@ func (t *Ticket) Close(solution string, updatedAt time.Time) error {
 	}
 
 	t.Solution = solution
-	t.UpdatedAt = &updatedAt
+	t.UpdatedAt = updatedAt
 	t.Status = StatusClose
 
 	return nil

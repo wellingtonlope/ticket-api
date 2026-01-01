@@ -38,8 +38,8 @@ func TestOpenTicket(t *testing.T) {
 				assert.Equal(t, exampleClient.ID, got.Client.ID)
 				assert.Equal(t, exampleClient.Name, got.Client.Name)
 				assert.Equal(t, exampleClient.Email, got.Client.Email)
-				assert.Equal(t, exampleDate, *got.CreatedAt)
-				assert.Nil(t, got.UpdatedAt)
+				assert.Equal(t, exampleDate, got.CreatedAt)
+				assert.Equal(t, exampleDate, got.UpdatedAt)
 			},
 			expectedError: nil,
 		},
@@ -95,7 +95,7 @@ func TestTicketGet(t *testing.T) {
 				assert.Equal(t, exampleOperator.Name, got.Operator.Name)
 				assert.Equal(t, exampleOperator.Email, got.Operator.Email)
 				assert.Equal(t, StatusInProgress, got.Status)
-				assert.Equal(t, exampleDate, *got.UpdatedAt)
+				assert.Equal(t, exampleDate, got.UpdatedAt)
 			},
 			expectedError: nil,
 		},
@@ -153,7 +153,7 @@ func TestTicketClose(t *testing.T) {
 			},
 			assertResult: func(t *testing.T, got *Ticket) {
 				assert.Equal(t, StatusClose, got.Status)
-				assert.Equal(t, exampleDate, *got.UpdatedAt)
+				assert.Equal(t, exampleDate, got.UpdatedAt)
 				assert.Equal(t, exampleSolution, got.Solution)
 			},
 			expectedError: nil,
