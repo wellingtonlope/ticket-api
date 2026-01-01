@@ -20,7 +20,7 @@ func (s *Server) Start(port int) error {
 
 func (s *Server) RegisterSwagger(file []byte) {
 	s.Echo.GET("/swagger/*", echoSwagger.EchoWrapHandler(func(c *echoSwagger.Config) {
-		c.URL = "/swagger/openapi.yaml"
+		c.URLs = []string{"/swagger/openapi.yaml"}
 	}))
 	s.Echo.GET("/swagger/openapi.yaml", func(c echo.Context) error {
 		return c.Blob(httpGO.StatusOK, "application/yaml", file)

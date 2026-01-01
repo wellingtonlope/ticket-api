@@ -1,10 +1,11 @@
 package mongo
 
 import (
+	"context"
+
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"golang.org/x/net/context"
 )
 
 type Repositories struct {
