@@ -1,6 +1,11 @@
 package main
 
 import (
+	"log"
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/joho/godotenv"
 	echoV4 "github.com/labstack/echo/v4"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase"
@@ -8,10 +13,6 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/infra/http/echo"
 	"github.com/wellingtonlope/ticket-api/internal/infra/jwt"
 	"github.com/wellingtonlope/ticket-api/internal/infra/mongo"
-	"log"
-	"os"
-	"strconv"
-	"time"
 )
 
 func main() {
@@ -23,7 +24,6 @@ func main() {
 		UriConnection: os.Getenv("MONGO_URI"),
 		Database:      os.Getenv("MONGO_DATABASE"),
 	})
-
 	if err != nil {
 		log.Fatalf("Error getting use cases: %v", err)
 	}

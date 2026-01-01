@@ -2,12 +2,13 @@ package http
 
 import (
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase/ticket"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
-	"net/http"
-	"time"
 )
 
 type (
@@ -108,7 +109,6 @@ func (c *TicketController) Open(request Request) Response {
 		LoggedUser:  *request.LoggedUser,
 	}
 	output, err := c.UCOpen.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -134,7 +134,6 @@ func (c *TicketController) Get(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCGet.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -166,7 +165,6 @@ func (c *TicketController) Close(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCClose.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -197,7 +195,6 @@ func (c *TicketController) AssignToOperator(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCAssignToOperator.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -226,7 +223,6 @@ func (c *TicketController) Delete(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	_, err := c.UCDelete.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -253,7 +249,6 @@ func (c *TicketController) GetByID(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCGetByID.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -277,7 +272,6 @@ func (c *TicketController) GetAll(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCGetAll.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -302,7 +296,6 @@ func (c *TicketController) GetAllByClient(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCGetAllByClient.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -327,7 +320,6 @@ func (c *TicketController) GetAllByOperator(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCGetAllByOperator.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {
@@ -351,7 +343,6 @@ func (c *TicketController) GetAllOpen(request Request) Response {
 		LoggedUser: *request.LoggedUser,
 	}
 	output, err := c.UCGetAllOpen.Handle(input)
-
 	if err != nil {
 		httpStatus := http.StatusInternalServerError
 		switch err {

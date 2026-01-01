@@ -3,10 +3,11 @@ package echo
 import (
 	"encoding/json"
 	"fmt"
+	httpGO "net/http"
+
 	"github.com/labstack/echo/v4"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/wellingtonlope/ticket-api/internal/infra/http"
-	httpGO "net/http"
 )
 
 type Server struct {

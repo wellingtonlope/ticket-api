@@ -1,10 +1,11 @@
 package http
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/wellingtonlope/ticket-api/internal/app/usecase/ticket"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/wellingtonlope/ticket-api/internal/app/usecase/ticket"
 )
 
 func TestTicketUserResponseFromUserOutput(t *testing.T) {

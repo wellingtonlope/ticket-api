@@ -1,11 +1,12 @@
 package user
 
 import (
+	"testing"
+	"time"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 	"github.com/wellingtonlope/ticket-api/internal/infra/memory"
-	"testing"
-	"time"
 )
 
 func TestRegister(t *testing.T) {

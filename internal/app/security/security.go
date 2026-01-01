@@ -2,6 +2,7 @@ package security
 
 import (
 	"errors"
+
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 

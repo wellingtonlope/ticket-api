@@ -8,9 +8,7 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-var (
-	ErrUserAlreadyExists = errors.New("user already exists")
-)
+var ErrUserAlreadyExists = errors.New("user already exists")
 
 type Register interface {
 	Handle(input RegisterInput) (*Output, error)

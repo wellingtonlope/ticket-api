@@ -2,10 +2,11 @@ package http
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
-	"testing"
 )
 
 type mockAuth struct {

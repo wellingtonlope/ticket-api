@@ -6,9 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var (
-	ErrPasswordIsInvalid = errors.New("password must be 6 characters or longer")
-)
+var ErrPasswordIsInvalid = errors.New("password must be 6 characters or longer")
 
 type Password struct {
 	hashedPassword string

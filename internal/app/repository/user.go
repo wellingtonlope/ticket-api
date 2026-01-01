@@ -6,9 +6,7 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-var (
-	ErrUserNotFound = errors.New("user not found")
-)
+var ErrUserNotFound = errors.New("user not found")
 
 type UserRepository interface {
 	Insert(user domain.User) (*domain.User, error)

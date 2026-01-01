@@ -1,8 +1,9 @@
 package ticket
 
 import (
-	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"time"
+
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
 	"github.com/wellingtonlope/ticket-api/internal/domain"

@@ -6,9 +6,7 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 )
 
-var (
-	ErrTicketNotFound = errors.New("ticket not found")
-)
+var ErrTicketNotFound = errors.New("ticket not found")
 
 type TicketRepository interface {
 	Insert(ticket domain.Ticket) (*domain.Ticket, error)

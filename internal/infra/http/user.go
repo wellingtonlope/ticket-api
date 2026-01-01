@@ -2,11 +2,12 @@ package http
 
 import (
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase/user"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
-	"net/http"
-	"time"
 )
 
 type (

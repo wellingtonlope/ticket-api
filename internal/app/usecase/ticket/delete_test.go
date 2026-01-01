@@ -12,7 +12,6 @@ import (
 )
 
 func TestDelete(t *testing.T) {
-
 	t.Run("Should delete a ticket", func(t *testing.T) {
 		repo := &memory.TicketRepository{}
 		repoUser := &memory.UserRepository{}

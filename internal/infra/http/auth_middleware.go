@@ -1,8 +1,9 @@
 package http
 
 import (
-	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"net/http"
+
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 )
 
 type AuthMiddleware struct {

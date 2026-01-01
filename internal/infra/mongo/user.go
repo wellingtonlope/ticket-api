@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
 	"go.mongodb.org/mongo-driver/bson"

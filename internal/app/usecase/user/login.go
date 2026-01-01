@@ -6,9 +6,7 @@ import (
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
 )
 
-var (
-	ErrUserEmailPasswordWrong = errors.New("email or password is wrong")
-)
+var ErrUserEmailPasswordWrong = errors.New("email or password is wrong")
 
 type Login interface {
 	Handle(input LoginInput) (*Output, error)

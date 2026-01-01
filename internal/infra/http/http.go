@@ -3,10 +3,11 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	"github.com/wellingtonlope/ticket-api/docs"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase"
-	"net/http"
 )
 
 const (
@@ -16,8 +17,11 @@ const (
 	DataFormat          = "2006-01-02T15:04:05"
 )
 
-type Handler func(r Request) Response
-type Middleware func(h Handler) Handler
+type (
+	Handler    func(r Request) Response
+	Middleware func(h Handler) Handler
+)
+
 type (
 	Request struct {
 		LoggedUser *security.User
@@ -41,9 +45,7 @@ type (
 	}
 )
 
-var (
-	ErrInvalidJsonBody = errors.New("invalid json body")
-)
+var ErrInvalidJsonBody = errors.New("invalid json body")
 
 type Server interface {
 	Register(r Route)

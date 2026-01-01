@@ -5,9 +5,7 @@ import (
 	"time"
 )
 
-var (
-	ErrNameIsInvalid = errors.New("name mustn't be empty")
-)
+var ErrNameIsInvalid = errors.New("name mustn't be empty")
 
 type Profile string
 

@@ -1,9 +1,10 @@
 package ticket
 
 import (
-	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"testing"
 	"time"
+
+	"github.com/wellingtonlope/ticket-api/internal/app/security"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/wellingtonlope/ticket-api/internal/app/repository"
@@ -12,7 +13,6 @@ import (
 )
 
 func TestGetByID(t *testing.T) {
-
 	t.Run("Should get a ticket by ID", func(t *testing.T) {
 		repo := &memory.TicketRepository{}
 		repoUser := &memory.UserRepository{}

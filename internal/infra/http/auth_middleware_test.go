@@ -1,11 +1,12 @@
 package http
 
 import (
+	httpGo "net/http"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
-	httpGo "net/http"
-	"testing"
 )
 
 func TestAuthMiddleware_Handle(t *testing.T) {

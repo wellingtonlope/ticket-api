@@ -3,14 +3,15 @@ package http
 import (
 	"errors"
 	"fmt"
+	httpGo "net/http"
+	"testing"
+	"time"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/wellingtonlope/ticket-api/internal/app/security"
 	"github.com/wellingtonlope/ticket-api/internal/app/usecase/user"
 	"github.com/wellingtonlope/ticket-api/internal/domain"
-	httpGo "net/http"
-	"testing"
-	"time"
 )
 
 type mockUCRegister struct {

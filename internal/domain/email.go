@@ -5,9 +5,7 @@ import (
 	"net/mail"
 )
 
-var (
-	ErrEmailIsInvalid = errors.New("email is invalid")
-)
+var ErrEmailIsInvalid = errors.New("email is invalid")
 
 type Email struct {
 	email string

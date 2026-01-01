@@ -42,7 +42,6 @@ func TestGet(t *testing.T) {
 		assert.Equal(t, operator.ID, ticketRepo.Operator.ID)
 		assert.Equal(t, operator.Name, ticketRepo.Operator.Name)
 		assert.Equal(t, operator.Email.String(), ticketRepo.Operator.Email.String())
-
 	})
 
 	t.Run("should return an error when user is a client", func(t *testing.T) {
