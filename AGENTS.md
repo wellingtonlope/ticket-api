@@ -33,6 +33,12 @@ make format-check
 # Run linters
 make lint
 
+# Run tests
+make test
+
+# Run format-check, lint, and test
+make all
+
 # Install required tools
 make install-tools
 ```

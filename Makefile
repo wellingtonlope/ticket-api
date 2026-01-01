@@ -1,15 +1,15 @@
-.PHONY: help format format-check lint install-tools check-gofumpt check-golangci-lint
+.PHONY: help format format-check lint test all install-tools check-gofumpt check-golangci-lint
 
-help: ## Show this help message
+help:
 	@echo 'Usage: make [target]'
 	@echo ''
 	@echo 'Available targets:'
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-format: check-gofumpt ## Format code with gofumpt
+format: check-gofumpt
 	gofumpt -w .
 
-format-check: check-gofumpt ## Check if code is properly formatted
+format-check: check-gofumpt
 	@echo "Checking formatting..."
 	@test -z "$$(gofumpt -l .)" || { \
 		echo "Code is not properly formatted. Run 'make format' to fix."; \
@@ -17,10 +17,15 @@ format-check: check-gofumpt ## Check if code is properly formatted
 	}
 	@echo "Code is properly formatted."
 
-lint: check-golangci-lint ## Run golangci-lint
+lint: check-golangci-lint
 	golangci-lint run
 
-install-tools: ## Install gofumpt and golangci-lint
+test:
+	go test ./...
+
+all: format-check lint test
+
+install-tools:
 	go install mvdan.cc/gofumpt@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
