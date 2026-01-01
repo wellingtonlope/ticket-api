@@ -71,7 +71,7 @@ func TestGet(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		ticket, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
 		input := GetInput{TicketID: "invalid-id", UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}

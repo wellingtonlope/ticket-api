@@ -72,7 +72,7 @@ func TestClose(t *testing.T) {
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		_ = ticket.Get(*operator, time.Now())
-		ticket, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(*ticket)
 
 		input := CloseInput{TicketID: "invalid-id", Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)

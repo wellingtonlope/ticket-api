@@ -120,7 +120,7 @@ func TestAssignToOperator(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		ticket, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(*ticket)
 		expectedUpdatedAt := time.Now()
 
 		input := AssignToOperatorInput{TicketID: "invalid-id", OperatorID: operator.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}

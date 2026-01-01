@@ -156,7 +156,7 @@ func (c *TicketController) Get(request Request) Response {
 
 func (c *TicketController) Close(request Request) Response {
 	var closeRequest CloseRequest
-	err := json.Unmarshal([]byte(request.Body), &closeRequest)
+	_ = json.Unmarshal([]byte(request.Body), &closeRequest)
 
 	input := ticket.CloseInput{
 		TicketID:   request.Params["id"],

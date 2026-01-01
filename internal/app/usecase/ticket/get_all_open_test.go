@@ -22,7 +22,7 @@ func TestGetAllOpen(t *testing.T) {
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		ticket, _ = repo.Insert(*ticket)
 		_ = ticket.Get(*operator, time.Now())
-		ticket, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(*ticket)
 
 		input := GetAllOpenInput{LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
@@ -45,7 +45,7 @@ func TestGetAllOpen(t *testing.T) {
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		ticket, _ = repo.Insert(*ticket)
 		_ = ticket.Get(*operator, time.Now())
-		ticket, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(*ticket)
 
 		input := GetAllOpenInput{LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)

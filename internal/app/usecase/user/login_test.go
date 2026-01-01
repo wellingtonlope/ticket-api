@@ -39,7 +39,7 @@ func TestLogin(t *testing.T) {
 		email := "user@mail.com"
 		password := "password"
 		user, _ := domain.UserRegister("user", email, password, time.Now())
-		user, _ = repo.Insert(*user)
+		_, _ = repo.Insert(*user)
 
 		output, err := usecase.Handle(LoginInput{
 			Email:    email,
