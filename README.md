@@ -6,7 +6,7 @@ Demo: https://TBD \
 Documentation: https://TBD/swagger/index.html
 
 ![Build](https://github.com/wellingtonlope/ticket-api/actions/workflows/build.yaml/badge.svg)
-![Coverage](https://img.shields.io/badge/Coverage-44.4%25-yellow)
+![Coverage](https://img.shields.io/badge/Coverage-44.2%25-yellow)
 
 ## Usage
 You can use .env to set up the environment and start the http server with the following command:
