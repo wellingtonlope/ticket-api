@@ -16,7 +16,8 @@ func TestTicketRepository_GetByID(t *testing.T) {
 	exampleTicket, _ := domain.OpenTicket("title", "description", exampleDate, *exampleClient)
 	exampleRepository := func() *TicketRepository {
 		m := &TicketRepository{}
-		exampleTicket, _ = m.Insert(*exampleTicket)
+		ticket, _ := m.Insert(exampleTicket)
+		exampleTicket = *ticket
 		return m
 	}()
 	fmt.Println(exampleTicket)
@@ -73,7 +74,7 @@ func TestTicketRepository_Insert(t *testing.T) {
 	t.Run("should insert a ticket", func(t *testing.T) {
 		repo := &TicketRepository{}
 
-		got, err := repo.Insert(*ticketFixture)
+		got, err := repo.Insert(ticketFixture)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, got)
@@ -91,7 +92,7 @@ func TestTicketRepository_Insert(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.NotNil(t, gotRepo)
-		assert.Equal(t, got, gotRepo)
+		assert.Equal(t, *got, *gotRepo)
 	})
 }
 
@@ -103,7 +104,7 @@ func TestTicketRepository_Update(t *testing.T) {
 
 	t.Run("should update a ticket", func(t *testing.T) {
 		repo := &TicketRepository{}
-		ticket, _ := repo.Insert(*ticketFixture)
+		ticket, _ := repo.Insert(ticketFixture)
 
 		expectedUpdatedAt := time.Now()
 		_ = ticket.Get(*operatorClientFixture, expectedUpdatedAt)
@@ -124,7 +125,7 @@ func TestTicketRepository_Update(t *testing.T) {
 	t.Run("shouldn't update a ticket", func(t *testing.T) {
 		repo := &TicketRepository{}
 
-		got, err := repo.Update(*ticketFixture)
+		got, err := repo.Update(ticketFixture)
 
 		assert.Nil(t, got)
 		assert.NotNil(t, err)
@@ -138,8 +139,8 @@ func TestTicketRepository_GetAll(t *testing.T) {
 
 	t.Run("should get all tickets", func(t *testing.T) {
 		repo := &TicketRepository{}
-		_, _ = repo.Insert(*ticketFixture)
-		_, _ = repo.Insert(*ticketFixture)
+		_, _ = repo.Insert(ticketFixture)
+		_, _ = repo.Insert(ticketFixture)
 
 		got, err := repo.GetAll()
 
@@ -159,8 +160,8 @@ func TestTicketRepository_GetAllOpen(t *testing.T) {
 
 	t.Run("should get all open tickets", func(t *testing.T) {
 		repo := &TicketRepository{}
-		_, _ = repo.Insert(*ticketOpenFixture)
-		_, _ = repo.Insert(*ticketGetFixture)
+		_, _ = repo.Insert(ticketOpenFixture)
+		_, _ = repo.Insert(ticketGetFixture)
 
 		got, err := repo.GetAllOpen()
 
@@ -186,8 +187,8 @@ func TestTicketRepository_GetAllByOperatorID(t *testing.T) {
 	t.Run("should get all open tickets", func(t *testing.T) {
 		repo := &TicketRepository{}
 
-		_, _ = repo.Insert(*ticket1Fixture)
-		_, _ = repo.Insert(*ticket2Fixture)
+		_, _ = repo.Insert(ticket1Fixture)
+		_, _ = repo.Insert(ticket2Fixture)
 
 		got, err := repo.GetAllByOperatorID(operator1Fixture.ID)
 
@@ -208,8 +209,8 @@ func TestTicketRepository_GetAllByClientID(t *testing.T) {
 	t.Run("should get all open tickets", func(t *testing.T) {
 		repo := &TicketRepository{}
 
-		_, _ = repo.Insert(*ticket1Fixture)
-		_, _ = repo.Insert(*ticket2Fixture)
+		_, _ = repo.Insert(ticket1Fixture)
+		_, _ = repo.Insert(ticket2Fixture)
 
 		got, err := repo.GetAllByClientID(userClient1Fixture.ID)
 
@@ -226,7 +227,7 @@ func TestTicketRepository_DeleteByID(t *testing.T) {
 
 	t.Run("should delete a ticket", func(t *testing.T) {
 		repo := &TicketRepository{}
-		ticket, _ := repo.Insert(*ticketFixture)
+		ticket, _ := repo.Insert(ticketFixture)
 
 		err := repo.DeleteByID(ticket.ID)
 

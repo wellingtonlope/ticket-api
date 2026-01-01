@@ -19,10 +19,12 @@ func TestGetAllOpen(t *testing.T) {
 		operator, _ := domain.UserRegister("operator", "operator@mail.com", "password", time.Now())
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
-		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		ticket, _ = repo.Insert(*ticket)
-		_ = ticket.Get(*operator, time.Now())
-		_, _ = repo.Insert(*ticket)
+		ticketInProgress, _ := domain.OpenTicket("title1", "description1", time.Now(), *operator)
+		insertedTicket, _ := repo.Insert(ticketInProgress)
+		_ = insertedTicket.Get(*operator, time.Now())
+		_, _ = repo.Update(*insertedTicket)
+		ticketOpen, _ := domain.OpenTicket("title2", "description2", time.Now(), *operator)
+		_, _ = repo.Insert(ticketOpen)
 
 		input := GetAllOpenInput{LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
@@ -42,10 +44,12 @@ func TestGetAllOpen(t *testing.T) {
 		operator, _ = repoUser.Insert(*operator)
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
-		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		ticket, _ = repo.Insert(*ticket)
-		_ = ticket.Get(*operator, time.Now())
-		_, _ = repo.Insert(*ticket)
+		ticketInProgress, _ := domain.OpenTicket("title", "description", time.Now(), *client)
+		insertedTicket, _ := repo.Insert(ticketInProgress)
+		_ = insertedTicket.Get(*operator, time.Now())
+		_, _ = repo.Update(*insertedTicket)
+		ticketOpen, _ := domain.OpenTicket("title2", "description2", time.Now(), *client)
+		_, _ = repo.Insert(ticketOpen)
 
 		input := GetAllOpenInput{LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)

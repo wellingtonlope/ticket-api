@@ -22,19 +22,19 @@ func TestClose(t *testing.T) {
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		_ = ticket.Get(*operator, time.Now())
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
-		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
+		input := CloseInput{TicketID: insertedTicket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
-		assert.Equal(t, ticket.ID, output.ID)
+		assert.Equal(t, insertedTicket.ID, output.ID)
 		assert.Equal(t, string(domain.StatusClose), output.Status)
 		assert.Equal(t, input.UpdatedAt, output.UpdatedAt)
 		assert.Equal(t, input.Solution, output.Solution)
 
-		ticketRepo, _ := repo.GetByID(ticket.ID)
+		ticketRepo, _ := repo.GetByID(insertedTicket.ID)
 		assert.Equal(t, domain.StatusClose, ticketRepo.Status)
 		assert.Equal(t, input.UpdatedAt, ticketRepo.UpdatedAt)
 		assert.Equal(t, input.Solution, output.Solution)
@@ -52,9 +52,9 @@ func TestClose(t *testing.T) {
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		_ = ticket.Get(*operator, time.Now())
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
-		input := CloseInput{TicketID: ticket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*client)}
+		input := CloseInput{TicketID: insertedTicket.ID, Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)
@@ -72,7 +72,7 @@ func TestClose(t *testing.T) {
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
 		_ = ticket.Get(*operator, time.Now())
-		_, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(ticket)
 
 		input := CloseInput{TicketID: "invalid-id", Solution: "solution", UpdatedAt: time.Now(), LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)

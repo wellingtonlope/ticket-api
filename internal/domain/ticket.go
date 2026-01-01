@@ -37,12 +37,12 @@ type Ticket struct {
 	UpdatedAt   time.Time
 }
 
-func OpenTicket(title, description string, createdAt time.Time, client User) (*Ticket, error) {
+func OpenTicket(title, description string, createdAt time.Time, client User) (Ticket, error) {
 	if title == "" {
-		return nil, ErrTicketTitleIsInvalid
+		return Ticket{}, ErrTicketTitleIsInvalid
 	}
 
-	return &Ticket{
+	return Ticket{
 		Title:       title,
 		Description: description,
 		Status:      StatusOpen,

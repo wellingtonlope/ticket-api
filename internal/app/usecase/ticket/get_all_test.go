@@ -20,8 +20,8 @@ func TestGetAll(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		_, _ = repo.Insert(*ticket)
-		_, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(ticket)
+		_, _ = repo.Insert(ticket)
 
 		input := GetAllInput{LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
@@ -39,8 +39,8 @@ func TestGetAll(t *testing.T) {
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		_, _ = repo.Insert(*ticket)
-		_, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(ticket)
+		_, _ = repo.Insert(ticket)
 
 		input := GetAllInput{LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)

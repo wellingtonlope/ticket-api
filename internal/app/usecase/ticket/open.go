@@ -40,10 +40,10 @@ func (u *open) Handle(input OpenInput) (*Output, error) {
 		return nil, err
 	}
 
-	ticket, err = u.ticketRepository.Insert(*ticket)
+	insertedTicket, err := u.ticketRepository.Insert(ticket)
 	if err != nil {
 		return nil, err
 	}
 
-	return ticketOutputFromTicket(ticket), nil
+	return ticketOutputFromTicket(insertedTicket), nil
 }

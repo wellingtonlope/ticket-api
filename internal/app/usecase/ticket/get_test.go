@@ -21,22 +21,22 @@ func TestGet(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 		expectedUpdatedAt := time.Now()
 
-		input := GetInput{TicketID: ticket.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
+		input := GetInput{TicketID: insertedTicket.ID, UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
-		assert.Equal(t, ticket.ID, output.ID)
+		assert.Equal(t, insertedTicket.ID, output.ID)
 		assert.Equal(t, string(domain.StatusInProgress), output.Status)
 		assert.Equal(t, expectedUpdatedAt, output.UpdatedAt)
 		assert.Equal(t, operator.ID, output.Operator.ID)
 		assert.Equal(t, operator.Name, output.Operator.Name)
 		assert.Equal(t, operator.Email.String(), output.Operator.Email)
 
-		ticketRepo, _ := repo.GetByID(ticket.ID)
+		ticketRepo, _ := repo.GetByID(insertedTicket.ID)
 		assert.Equal(t, domain.StatusInProgress, ticketRepo.Status)
 		assert.Equal(t, expectedUpdatedAt, ticketRepo.UpdatedAt)
 		assert.Equal(t, operator.ID, ticketRepo.Operator.ID)
@@ -52,9 +52,9 @@ func TestGet(t *testing.T) {
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
-		input := GetInput{TicketID: ticket.ID, LoggedUser: security.NewUser(*client)}
+		input := GetInput{TicketID: insertedTicket.ID, LoggedUser: security.NewUser(*client)}
 		output, err := uc.Handle(input)
 
 		assert.Nil(t, output)
@@ -71,7 +71,7 @@ func TestGet(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *operator)
-		_, _ = repo.Insert(*ticket)
+		_, _ = repo.Insert(ticket)
 		expectedUpdatedAt := time.Now()
 
 		input := GetInput{TicketID: "invalid-id", UpdatedAt: expectedUpdatedAt, LoggedUser: security.NewUser(*operator)}

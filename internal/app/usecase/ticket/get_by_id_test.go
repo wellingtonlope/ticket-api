@@ -25,28 +25,28 @@ func TestGetByID(t *testing.T) {
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		_ = ticket.Get(*operator, time.Now())
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
 		input := GetByIDInput{
-			TicketID:   ticket.ID,
+			TicketID:   insertedTicket.ID,
 			LoggedUser: security.NewUser(*client),
 		}
 
 		output, err := uc.Handle(input)
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
-		assert.Equal(t, ticket.ID, output.ID)
-		assert.Equal(t, ticket.Title, output.Title)
-		assert.Equal(t, ticket.Description, output.Description)
-		assert.Equal(t, ticket.CreatedAt, output.CreatedAt)
-		assert.Equal(t, ticket.UpdatedAt, output.UpdatedAt)
-		assert.Equal(t, ticket.Client.ID, output.Client.ID)
-		assert.Equal(t, ticket.Client.Name, output.Client.Name)
-		assert.Equal(t, ticket.Client.Email.String(), output.Client.Email)
-		assert.Equal(t, string(ticket.Status), output.Status)
-		assert.Equal(t, ticket.Operator.ID, output.Operator.ID)
-		assert.Equal(t, ticket.Operator.Name, output.Operator.Name)
-		assert.Equal(t, ticket.Operator.Email.String(), output.Operator.Email)
+		assert.Equal(t, insertedTicket.ID, output.ID)
+		assert.Equal(t, insertedTicket.Title, output.Title)
+		assert.Equal(t, insertedTicket.Description, output.Description)
+		assert.Equal(t, insertedTicket.CreatedAt, output.CreatedAt)
+		assert.Equal(t, insertedTicket.UpdatedAt, output.UpdatedAt)
+		assert.Equal(t, insertedTicket.Client.ID, output.Client.ID)
+		assert.Equal(t, insertedTicket.Client.Name, output.Client.Name)
+		assert.Equal(t, insertedTicket.Client.Email.String(), output.Client.Email)
+		assert.Equal(t, string(insertedTicket.Status), output.Status)
+		assert.Equal(t, insertedTicket.Operator.ID, output.Operator.ID)
+		assert.Equal(t, insertedTicket.Operator.Name, output.Operator.Name)
+		assert.Equal(t, insertedTicket.Operator.Email.String(), output.Operator.Email)
 	})
 
 	t.Run("Shouldn't get a ticket by another user", func(t *testing.T) {
@@ -59,10 +59,10 @@ func TestGetByID(t *testing.T) {
 		clientOther, _ := domain.UserRegister("client2", "client2@mail.com", "password", time.Now())
 		clientOther, _ = repoUser.Insert(*clientOther)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *clientOther)
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
 		input := GetByIDInput{
-			TicketID:   ticket.ID,
+			TicketID:   insertedTicket.ID,
 			LoggedUser: security.NewUser(*client),
 		}
 
@@ -83,17 +83,17 @@ func TestGetByID(t *testing.T) {
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
 		input := GetByIDInput{
-			TicketID:   ticket.ID,
+			TicketID:   insertedTicket.ID,
 			LoggedUser: security.NewUser(*operator),
 		}
 
 		output, err := uc.Handle(input)
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
-		assert.Equal(t, ticket.ID, output.ID)
+		assert.Equal(t, insertedTicket.ID, output.ID)
 	})
 
 	t.Run("Shouldn't get a ticket by ID when invalid input", func(t *testing.T) {

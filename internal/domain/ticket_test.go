@@ -19,7 +19,7 @@ func TestOpenTicket(t *testing.T) {
 	testCases := []struct {
 		name          string
 		args          args
-		assertResult  func(t *testing.T, got *Ticket)
+		assertResult  func(t *testing.T, got Ticket)
 		expectedError error
 	}{
 		{
@@ -30,8 +30,7 @@ func TestOpenTicket(t *testing.T) {
 				createdAt:   exampleDate,
 				client:      exampleClient,
 			},
-			assertResult: func(t *testing.T, got *Ticket) {
-				assert.NotNil(t, got)
+			assertResult: func(t *testing.T, got Ticket) {
 				assert.Equal(t, "title", got.Title)
 				assert.Equal(t, "description", got.Description)
 				assert.Equal(t, StatusOpen, got.Status)
@@ -51,8 +50,8 @@ func TestOpenTicket(t *testing.T) {
 				createdAt:   exampleDate,
 				client:      exampleClient,
 			},
-			assertResult: func(t *testing.T, got *Ticket) {
-				assert.Nil(t, got)
+			assertResult: func(t *testing.T, got Ticket) {
+				assert.Equal(t, Ticket{}, got)
 			},
 			expectedError: ErrTicketTitleIsInvalid,
 		},
@@ -80,17 +79,17 @@ func TestTicketGet(t *testing.T) {
 		name          string
 		ticket        Ticket
 		args          args
-		assertResult  func(t *testing.T, got *Ticket)
+		assertResult  func(t *testing.T, got Ticket)
 		expectedError error
 	}{
 		{
 			name:   "should get a valid ticket",
-			ticket: *exampleTicketOpen,
+			ticket: exampleTicketOpen,
 			args: args{
 				operator:  exampleOperator,
 				updatedAt: exampleDate,
 			},
-			assertResult: func(t *testing.T, got *Ticket) {
+			assertResult: func(t *testing.T, got Ticket) {
 				assert.Equal(t, exampleOperator.ID, got.Operator.ID)
 				assert.Equal(t, exampleOperator.Name, got.Operator.Name)
 				assert.Equal(t, exampleOperator.Email, got.Operator.Email)
@@ -101,13 +100,13 @@ func TestTicketGet(t *testing.T) {
 		},
 		{
 			name:   "should return an error if operator is not an operator",
-			ticket: *exampleTicketOpen,
+			ticket: exampleTicketOpen,
 			args: args{
 				operator:  exampleClient,
 				updatedAt: exampleDate,
 			},
-			assertResult: func(t *testing.T, got *Ticket) {
-				assert.Equal(t, *exampleTicketOpen, *got)
+			assertResult: func(t *testing.T, got Ticket) {
+				assert.Equal(t, exampleTicketOpen, got)
 			},
 			expectedError: ErrTicketNoOperator,
 		},
@@ -115,7 +114,7 @@ func TestTicketGet(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := tc.ticket.Get(*tc.args.operator, tc.args.updatedAt)
-			tc.assertResult(t, &tc.ticket)
+			tc.assertResult(t, tc.ticket)
 			assert.Equal(t, tc.expectedError, err)
 		})
 	}
@@ -128,10 +127,10 @@ func TestTicketClose(t *testing.T) {
 	exampleOperator, _ := UserRegister("operator", "operator@mail.com", "password", exampleDate)
 	exampleOperator.Profile = ProfileOperator
 	exampleTicketOpen, _ := OpenTicket("title", "description", exampleDate, *exampleClient)
-	exampleTicketGet := func() *Ticket {
-		m := *exampleTicketOpen
+	exampleTicketGet := func() Ticket {
+		m := exampleTicketOpen
 		_ = m.Get(*exampleOperator, exampleDate)
-		return &m
+		return m
 	}()
 	type args struct {
 		solution  string
@@ -141,17 +140,17 @@ func TestTicketClose(t *testing.T) {
 		name          string
 		ticket        Ticket
 		args          args
-		assertResult  func(t *testing.T, got *Ticket)
+		assertResult  func(t *testing.T, got Ticket)
 		expectedError error
 	}{
 		{
 			name:   "should close a valid ticket",
-			ticket: *exampleTicketGet,
+			ticket: exampleTicketGet,
 			args: args{
 				solution:  exampleSolution,
 				updatedAt: exampleDate,
 			},
-			assertResult: func(t *testing.T, got *Ticket) {
+			assertResult: func(t *testing.T, got Ticket) {
 				assert.Equal(t, StatusClose, got.Status)
 				assert.Equal(t, exampleDate, got.UpdatedAt)
 				assert.Equal(t, exampleSolution, got.Solution)
@@ -160,13 +159,13 @@ func TestTicketClose(t *testing.T) {
 		},
 		{
 			name:   "should return an error if no operator",
-			ticket: *exampleTicketOpen,
+			ticket: exampleTicketOpen,
 			args: args{
 				solution:  exampleSolution,
 				updatedAt: exampleDate,
 			},
-			assertResult: func(t *testing.T, got *Ticket) {
-				assert.Equal(t, *exampleTicketOpen, *got)
+			assertResult: func(t *testing.T, got Ticket) {
+				assert.Equal(t, exampleTicketOpen, got)
 			},
 			expectedError: ErrTicketNoGetToClose,
 		},
@@ -174,7 +173,7 @@ func TestTicketClose(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := tc.ticket.Close(tc.args.solution, tc.args.updatedAt)
-			tc.assertResult(t, &tc.ticket)
+			tc.assertResult(t, tc.ticket)
 			assert.Equal(t, tc.expectedError, err)
 		})
 	}

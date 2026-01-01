@@ -20,10 +20,10 @@ func TestDelete(t *testing.T) {
 		client, _ := domain.UserRegister("client", "client@mail.com", "password", time.Now())
 		client, _ = repoUser.Insert(*client)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
 		input := DeleteInput{
-			TicketID:   ticket.ID,
+			TicketID:   insertedTicket.ID,
 			LoggedUser: security.NewUser(*client),
 		}
 
@@ -31,7 +31,7 @@ func TestDelete(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
 
-		ticketRepo, err := repo.GetByID(ticket.ID)
+		ticketRepo, err := repo.GetByID(insertedTicket.ID)
 		assert.Nil(t, ticketRepo)
 		assert.NotNil(t, err)
 		assert.Equal(t, repository.ErrTicketNotFound, err)
@@ -49,10 +49,10 @@ func TestDelete(t *testing.T) {
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
 		_ = ticket.Get(*operator, time.Now())
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
 		input := DeleteInput{
-			TicketID:   ticket.ID,
+			TicketID:   insertedTicket.ID,
 			LoggedUser: security.NewUser(*client),
 		}
 
@@ -73,10 +73,10 @@ func TestDelete(t *testing.T) {
 		operator.Profile = domain.ProfileOperator
 		operator, _ = repoUser.Insert(*operator)
 		ticket, _ := domain.OpenTicket("title", "description", time.Now(), *client)
-		ticket, _ = repo.Insert(*ticket)
+		insertedTicket, _ := repo.Insert(ticket)
 
 		input := DeleteInput{
-			TicketID:   ticket.ID,
+			TicketID:   insertedTicket.ID,
 			LoggedUser: security.NewUser(*operator),
 		}
 
