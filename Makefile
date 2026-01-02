@@ -23,7 +23,7 @@ lint: check-golangci-lint
 test:
 	go test ./...
 
-all: format-check lint test
+all: format lint test
 
 install-tools:
 	go install mvdan.cc/gofumpt@latest
