@@ -1,4 +1,4 @@
-.PHONY: help format format-check lint test all install-tools check-gofumpt check-golangci-lint
+.PHONY: help format format-check lint test test-bdd all install-tools check-gofumpt check-golangci-lint
 
 help:
 	@echo 'Usage: make [target]'
@@ -21,9 +21,9 @@ lint: check-golangci-lint
 	golangci-lint run
 
 test:
-	go test ./...
+	go test ./... -v
 
-all: format lint test
+all: format lint test 
 
 install-tools:
 	go install mvdan.cc/gofumpt@latest

@@ -20,6 +20,9 @@ go test -v ./path/to/package -run TestFunctionName
 
 # Run tests in a specific package
 go test -v ./path/to/package
+
+# Run BDD tests
+cd test && go test -v -run ^TestRegisterFeature$
 ```
 
 ### Lint/Format
@@ -126,6 +129,17 @@ import (
 - Controllers in user.go, ticket.go
 - Error responses wrapped in `ErrorResponse` struct
 - JSON marshaling with `wrapBody()`, `wrapError()`
+
+### BDD Testing
+- Feature files in `test/features/` using Gherkin syntax
+- Step definitions in `test/steps/*.go` (e.g., `register.go` for `register.feature`)
+- Shared utilities in `test/steps/utils.go`
+- Entry point in `test/suite_test.go` with `TestXxxFeature` functions
+- Feature suite structs (e.g., `RegisterFeatureSuite`) contain step definition methods
+- Step definitions are methods of the feature suite struct (not standalone functions)
+- Use `InitializeTestSuite()` and `InitializeScenario()` methods on the suite struct
+- Run with: `cd test && go test -v -run ^TestRegisterFeature$`
+- Uses godog framework integrated with `go test`
 
 ### Architecture
 - Clean Architecture with DDD principles
