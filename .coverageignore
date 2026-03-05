@@ -8,5 +8,3 @@ cmd/
 # Test utilities (BDD helpers, not production code)
 test/
 
-# MongoDB repository (uses external database)
-internal/infra/mongo/
