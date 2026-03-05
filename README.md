@@ -6,7 +6,9 @@ Demo: https://TBD \
 Documentation: https://TBD/swagger/index.html
 
 ![Build](https://github.com/wellingtonlope/ticket-api/actions/workflows/build.yaml/badge.svg)
+![Go Version](https://img.shields.io/github/go-mod/go-version/wellingtonlope/ticket-api)
 ![Coverage](https://raw.githubusercontent.com/wiki/wellingtonlope/ticket-api/coverage.svg)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
 
 ## Usage
 You can use .env to set up the environment and start the http server with the following command:
