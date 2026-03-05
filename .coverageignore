@@ -1,0 +1,12 @@
+# Files and directories to exclude from code coverage
+# One pattern per line
+# Comments start with #
+
+# Entrypoint
+cmd/
+
+# Test utilities (BDD helpers, not production code)
+test/
+
+# MongoDB repository (uses external database)
+internal/infra/mongo/
