@@ -25,34 +25,19 @@ jobs:
 
       - name: Run Test
         run: |
-          go test -v -covermode=count -coverprofile=coverage.out ./...
-          go tool cover -func=coverage.out -o=coverage.out
+          go test ./... -coverprofile=coverage.out -count=1 -v
 
-      - name: Go Coverage Badge
-        uses: tj-actions/coverage-badge-go@v1.1
+      - name: Generate coverage report
+        run: go tool cover -func=coverage.out
+
+      - name: Update coverage report and badge
+        uses: ncruces/go-coverage-report@v0
         with:
-          filename: coverage.out
-
-      - name: Verify Changed files
-        uses: tj-actions/verify-changed-files@v8.1
-        id: verify-changed-files
-        with:
-          files: README.md
-
-      - name: Commit changes
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add README.md
-          git commit -m "chore: Updated coverage badge."
-
-      - name: Push changes
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ github.token }}
-          branch: ${{ github.head_ref }}
+          coverage-file: coverage.out
+          report: true
+          chart: true
+          amend: true
+        continue-on-error: true
 
   # Deploy:
   #   name: Deploy application
